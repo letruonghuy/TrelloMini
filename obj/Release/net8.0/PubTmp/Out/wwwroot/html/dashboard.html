@@ -1,0 +1,1136 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>TrelloMini - Dashboard</title>
+    <script>
+    (function () {
+        var t = localStorage.getItem('tm_theme') || 'dark';
+        document.documentElement.setAttribute('data-theme', t);
+        window.addEventListener('storage', function (e) {
+            if (e.key === 'tm_theme')
+                document.documentElement.setAttribute('data-theme', e.newValue || 'dark');
+        });
+    })();
+</script>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/dashboard.css">
+    
+</head>
+<body>
+
+    <!-- TOAST CONTAINER -->
+    <div id="toast-container"></div>
+
+    <!-- SIDEBAR OVERLAY (mobile) -->
+    <div class="sidebar-overlay" id="sidebar-overlay" onclick="closeSidebar()"></div>
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-logo">
+            <div class="logo-icon">TM</div>
+            <span class="logo-text">TrelloMini</span>
+        </div>
+        <div class="sidebar-section">
+            <div class="sidebar-label">Workspace</div>
+            <a class="sidebar-item active" href="/dashboard.html">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M1 3h14v1.5H1V3zm0 4h14v1.5H1V7zm0 4h8v1.5H1V11z" /></svg>Board
+            </a>
+            <a class="sidebar-item" href="/projects.html">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M2 2h5v5H2V2zm0 7h5v5H2V9zm7-7h5v5H9V2zm0 7h5v5H9V9z" /></svg>Projects
+            </a>
+        </div>
+        <div class="divider"></div>
+        <div class="sidebar-section">
+            <div class="sidebar-label">Project</div>
+            <div class="field-group" style="padding:4px 10px 8px;">
+               
+                <select id="projectSelect" style="font-size:11.5px;font-family:var(--font-mono);width:100%;"></select>
+            </div>
+        </div>
+
+        <div class="sidebar-footer">
+            <a class="sidebar-item active" href="/settings.html">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M8 4.754a3.246 3.246 0 100 6.492 3.246 3.246 0 000-6.492zM5.754 8a2.246 2.246 0 114.492 0 2.246 2.246 0 01-4.492 0z" /><path d="M9.796 1.343c-.527-1.79-3.065-1.79-3.592 0l-.094.319a.873.873 0 01-1.255.52l-.292-.16c-1.64-.892-3.433.902-2.54 2.541l.159.292a.873.873 0 01-.52 1.255l-.319.094c-1.79.527-1.79 3.065 0 3.592l.319.094a.873.873 0 01.52 1.255l-.16.292c-.892 1.64.901 3.434 2.541 2.54l.292-.159a.873.873 0 011.255.52l.094.319c.527 1.79 3.065 1.79 3.592 0l.094-.319a.873.873 0 011.255-.52l.292.16c1.64.893 3.434-.902 2.54-2.541l-.159-.292a.873.873 0 01.52-1.255l.319-.094c1.79-.527 1.79-3.065 0-3.592l-.319-.094a.873.873 0 01-.52-1.255l.16-.292c.893-1.64-.902-3.433-2.541-2.54l-.292.159a.873.873 0 01-1.255-.52l-.094-.319zm-2.633.283c.246-.835 1.428-.835 1.674 0l.094.319a1.873 1.873 0 002.693 1.115l.291-.16c.764-.415 1.6.42 1.184 1.185l-.159.292a1.873 1.873 0 001.116 2.692l.318.094c.835.246.835 1.428 0 1.674l-.319.094a1.873 1.873 0 00-1.115 2.693l.16.291c.415.764-.42 1.6-1.185 1.184l-.291-.159a1.873 1.873 0 00-2.693 1.116l-.094.318c-.246.835-1.428.835-1.674 0l-.094-.319a1.873 1.873 0 00-2.692-1.115l-.292.16c-.764.415-1.6-.42-1.184-1.185l.159-.291A1.873 1.873 0 003.06 9.377l-.319-.094c-.835-.246-.835-1.428 0-1.674l.319-.094A1.873 1.873 0 004.175 5.02l-.16-.292c-.415-.764.42-1.6 1.185-1.184l.292.159a1.873 1.873 0 002.692-1.115l.094-.319z" /></svg>
+                Setting
+            </a>
+            <div class="user-chip">
+                <div class="avatar" id="sidebar-avatar">U</div>
+                <div style="flex:1;min-width:0;">
+                    <div style="font-size:13px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;" id="sidebar-name">User</div>
+                    <div style="font-size:11px;color:var(--text-muted);">Member</div>
+                </div>
+                <button class="btn btn-ghost" onclick="logout()" style="padding:4px 8px;font-size:12px;">Logout</button>
+            </div>
+        </div>
+        
+    </aside>
+
+    <!-- MAIN -->
+    <div class="main">
+        <header class="topbar">
+            <div class="topbar-left">
+                <button class="menu-btn" onclick="toggleSidebar()">
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M1 3h14v1.5H1V3zm0 4h14v1.5H1V7zm0 4h14v1.5H1V11z" /></svg>
+                </button>
+                <span style="color:var(--text-muted);">TrelloMini</span>
+                <span class="breadcrumb-sep">›</span>
+                <span class="topbar-title" id="topbar-title">Board</span>
+            </div>
+            <!-- Real-time indicator thay Refresh button -->
+            <div class="topbar-right">
+                <div class="realtime-badge" id="realtime-badge" title="Tự động cập nhật mỗi 15 giây">
+                    <span class="realtime-dot" id="realtime-dot"></span>
+                    <span class="realtime-label" id="realtime-label">Live</span>
+                </div>
+            </div>
+        </header>
+
+        <div class="content">
+            <div class="tabs">
+                <button class="tab-btn active" id="tab-board-btn" onclick="switchTab('board',this)">Board</button>
+                <button class="tab-btn" onclick="switchTab('archived',this)">
+                    Archived
+                    <span id="archived-count-badge" style="display:none;background:rgba(210,153,34,.2);color:var(--accent-yellow);font-size:10px;padding:1px 6px;border-radius:10px;margin-left:4px;">0</span>
+                </button>
+            </div>
+
+            <!-- BOARD TAB -->
+            <div id="tab-board">
+                <!-- CREATE PANEL -->
+                <div class="create-panel" id="create-panel">
+                    <div class="panel-title">
+                        <svg width="14" height="14" viewBox="0 0 16 16" fill="var(--accent-blue)"><path d="M8 2a.5.5 0 01.5.5v5h5a.5.5 0 010 1h-5v5a.5.5 0 01-1 0v-5h-5a.5.5 0 010-1h5v-5A.5.5 0 018 2z" /></svg>
+                        Tạo Card Mới
+                    </div>
+                    <div class="create-grid">
+                        <div class="field-group" style="grid-column:span 2;">
+                            <label>Tiêu đề</label>
+                            <input id="task-title" placeholder="Nhập tiêu đề card..." />
+                        </div>
+                        <div class="field-group">
+                            <label>Priority</label>
+                            <select id="task-priority"><option>Low</option><option>Medium</option><option selected>High</option></select>
+                        </div>
+                    </div>
+                    <div class="field-group" style="margin-bottom:12px;">
+                        <label>Mô tả</label>
+                        <textarea id="task-desc" placeholder="Mô tả (tùy chọn)..."></textarea>
+                    </div>
+                    <div class="create-row">
+                        <div class="field-group">
+                            <label>Assignee</label>
+                            <select id="task-assignee"><option value="">(Unassigned)</option></select>
+                        </div>
+                        <div class="field-group">
+                            <label>Due Date</label>
+                            <input type="date" id="task-duedate" />
+                        </div>
+                        <div class="field-group">
+                            <label>Label</label>
+                            <div class="label-picker" id="create-label-picker">
+                                <div class="label-dot none selected" data-color="" onclick="selectLabel(this,'create-label-picker')"></div>
+                                <div class="label-dot" data-color="red" style="background:#f85149" onclick="selectLabel(this,'create-label-picker')"></div>
+                                <div class="label-dot" data-color="orange" style="background:#e3692e" onclick="selectLabel(this,'create-label-picker')"></div>
+                                <div class="label-dot" data-color="yellow" style="background:#d29922" onclick="selectLabel(this,'create-label-picker')"></div>
+                                <div class="label-dot" data-color="green" style="background:#2ea043" onclick="selectLabel(this,'create-label-picker')"></div>
+                                <div class="label-dot" data-color="blue" style="background:#388bfd" onclick="selectLabel(this,'create-label-picker')"></div>
+                                <div class="label-dot" data-color="purple" style="background:#8957e5" onclick="selectLabel(this,'create-label-picker')"></div>
+                            </div>
+                        </div>
+                        <button class="btn btn-primary" id="btn-create" style="align-self:end;">
+                            <svg width="12" height="12" viewBox="0 0 16 16" fill="white"><path d="M8 2a.5.5 0 01.5.5v5h5a.5.5 0 010 1h-5v5a.5.5 0 01-1 0v-5h-5a.5.5 0 010-1h5v-5A.5.5 0 018 2z" /></svg>Create
+                        </button>
+                    </div>
+                    <div class="hint-text">Nếu tạo thất bại, vào <code>Projects</code> và thêm bạn vào project.</div>
+                </div>
+
+                <!-- FILTER BAR -->
+                <div class="filter-bar">
+                    <span class="filter-bar-title">
+                        <svg width="13" height="13" viewBox="0 0 16 16" fill="currentColor" style="vertical-align:-2px;margin-right:3px;"><path d="M6 10.5a.5.5 0 01.5-.5h3a.5.5 0 010 1h-3a.5.5 0 01-.5-.5zm-2-3a.5.5 0 01.5-.5h7a.5.5 0 010 1h-7a.5.5 0 01-.5-.5zm-2-3a.5.5 0 01.5-.5h11a.5.5 0 010 1h-11a.5.5 0 01-.5-.5z" /></svg>Filter
+                    </span>
+                    <div class="filter-search">
+                        <svg class="filter-search-icon" width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M11.742 10.344a6.5 6.5 0 10-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 001.415-1.414l-3.85-3.85a1.007 1.007 0 00-.115-.099zm-5.242 1.156a5.5 5.5 0 110-11 5.5 5.5 0 010 11z" /></svg>
+                        <input type="text" id="filter-search" placeholder="Tìm kiếm..." oninput="applyFilters()" />
+                    </div>
+                    <select class="filter-select" id="filter-assignee" onchange="applyFilters()">
+                        <option value="">Tất cả assignee</option>
+                        <option value="__unassigned__">Chưa assign</option>
+                    </select>
+                    <select class="filter-select" id="filter-priority" onchange="applyFilters()">
+                        <option value="">Tất cả priority</option>
+                        <option value="High">🔴 High</option>
+                        <option value="Medium">🟡 Medium</option>
+                        <option value="Low">🟢 Low</option>
+                    </select>
+                    <select class="filter-select" id="filter-due" onchange="applyFilters()">
+                        <option value="">Tất cả due date</option>
+                        <option value="overdue">⚠ Quá hạn</option>
+                        <option value="soon">🔔 Sắp hết hạn</option>
+                        <option value="has_due">📅 Có due date</option>
+                        <option value="no_due">Không có due date</option>
+                    </select>
+                    <div class="filter-label-group">
+                        <span>Label:</span>
+                        <div class="filter-label-dot none-dot active" data-color="" title="Tất cả" onclick="filterByLabel(this)"></div>
+                        <div class="filter-label-dot" data-color="red" style="background:#f85149" onclick="filterByLabel(this)"></div>
+                        <div class="filter-label-dot" data-color="orange" style="background:#e3692e" onclick="filterByLabel(this)"></div>
+                        <div class="filter-label-dot" data-color="yellow" style="background:#d29922" onclick="filterByLabel(this)"></div>
+                        <div class="filter-label-dot" data-color="green" style="background:#2ea043" onclick="filterByLabel(this)"></div>
+                        <div class="filter-label-dot" data-color="blue" style="background:#388bfd" onclick="filterByLabel(this)"></div>
+                        <div class="filter-label-dot" data-color="purple" style="background:#8957e5" onclick="filterByLabel(this)"></div>
+                    </div>
+                    <button class="filter-clear-btn" id="filter-clear-btn" onclick="clearFilters()">
+                        <svg width="11" height="11" viewBox="0 0 16 16" fill="currentColor"><path d="M4.646 4.646a.5.5 0 01.708 0L8 7.293l2.646-2.647a.5.5 0 01.708.708L8.707 8l2.647 2.646a.5.5 0 01-.708.708L8 8.707l-2.646 2.647a.5.5 0 01-.708-.708L7.293 8 4.646 5.354a.5.5 0 010-.708z" /></svg>
+                        Xóa filter
+                    </button>
+                    <span class="filter-summary" id="filter-summary"></span>
+                </div>
+
+                <!-- BOARD -->
+                <div class="board-header">
+                    <div class="board-title">Kanban Board</div>
+                    <div class="board-hint">
+                        <span>Click card để xem chi tiết</span>
+                        <span style="color:var(--border)">·</span>
+                        <span>Kéo thả để đổi cột</span>
+                    </div>
+                </div>
+
+                <div class="board">
+                    <div class="column" id="col-todo" data-status="1">
+                        <div class="col-header">
+                            <div class="col-title-wrap"><div class="col-dot todo"></div><span class="col-title">To Do</span></div>
+                            <span class="col-count" id="count-todo">0</span>
+                        </div>
+                        <div class="col-list" id="list-todo"></div>
+                    </div>
+                    <div class="column" id="col-inprogress" data-status="2">
+                        <div class="col-header">
+                            <div class="col-title-wrap"><div class="col-dot inprogress"></div><span class="col-title">In Progress</span></div>
+                            <span class="col-count" id="count-inprogress">0</span>
+                        </div>
+                        <div class="col-list" id="list-inprogress"></div>
+                    </div>
+                    <div class="column" id="col-done" data-status="3">
+                        <div class="col-header">
+                            <div class="col-title-wrap"><div class="col-dot done"></div><span class="col-title">Done</span></div>
+                            <span class="col-count" id="count-done">0</span>
+                        </div>
+                        <div class="col-list" id="list-done"></div>
+                    </div>
+                </div>
+            </div><!-- /tab-board -->
+            <!-- ARCHIVED TAB -->
+            <div id="tab-archived" style="display:none;">
+                <div class="archived-panel">
+                    <div class="archived-header">
+                        <div class="archived-title">
+                            <svg width="14" height="14" viewBox="0 0 16 16" fill="var(--accent-yellow)"><path d="M0 2a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1v7.5a2.5 2.5 0 01-2.5 2.5h-9A2.5 2.5 0 011 12.5V5a1 1 0 01-1-1V2zm2 3v7.5A1.5 1.5 0 003.5 14h9a1.5 1.5 0 001.5-1.5V5H2zm13-3H1v2h14V2zM5 7.5a.5.5 0 01.5-.5h5a.5.5 0 010 1h-5a.5.5 0 01-.5-.5z" /></svg>
+                            Archived Cards
+                        </div>
+                        <button class="btn btn-ghost btn-sm" onclick="loadArchived()">
+                            <svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><path d="M1.5 8a6.5 6.5 0 1110.653-5H13a.5.5 0 000-1H9.5a.5.5 0 00-.5.5v3.5a.5.5 0 001 0V2.804A5.5 5.5 0 112.5 8a.5.5 0 00-1 0z" /></svg>Refresh
+                        </button>
+                    </div>
+                    <div class="archived-list" id="archived-list">
+                        <div class="empty-state"><div class="empty-state-icon">📦</div><div class="empty-state-text">Chưa có card nào được archive</div></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="modal-root"></div>
+    <div id="detail-root"></div>
+
+    <script>
+    // ===== CONSTANTS =====
+    const LABEL_COLORS = { red:'#f85149', orange:'#e3692e', yellow:'#d29922', green:'#2ea043', blue:'#388bfd', purple:'#8957e5' };
+    const STATUS_NAMES = { 1:'To Do', 2:'In Progress', 3:'Done' };
+
+    // Empty state HTML cho từng cột
+    const EMPTY_STATES = {
+        todo:       '<div class="empty-state"><div class="empty-state-icon">📋</div><div class="empty-state-text">Chưa có card nào</div></div>',
+        inprogress: '<div class="empty-state"><div class="empty-state-icon">⚙️</div><div class="empty-state-text">Chưa có card nào</div></div>',
+        done:       '<div class="empty-state"><div class="empty-state-icon">✅</div><div class="empty-state-text">Chưa có card nào</div></div>',
+    };
+
+    // ===== SETTINGS =====
+    const SETTINGS_KEY = 'tm_settings';
+    const CURRENT_PROJECT_KEY = 'tm_current_project_id';
+    const DEFAULT_SETTINGS = {
+        compact: false,
+        animation: true,
+        defaultPriority: 'High',
+        pollInterval: 15000,
+        showAssigneeName: true,
+        showDueBadge: true,
+        toastOnPoll: true,
+        toastOnDrag: true,
+        toastDuration: 3000,
+        language: 'vi',
+        dateFormat: 'dd/MM/yyyy',
+    };
+
+    function loadSettings() {
+        try {
+            return normalizeSettings({ ...DEFAULT_SETTINGS, ...JSON.parse(localStorage.getItem(SETTINGS_KEY) || '{}') });
+        } catch {
+            return normalizeSettings(DEFAULT_SETTINGS);
+        }
+    }
+
+    function normalizeSettings(s) {
+        return {
+            ...DEFAULT_SETTINGS,
+            ...s,
+            pollInterval: Number(s.pollInterval ?? DEFAULT_SETTINGS.pollInterval),
+            toastDuration: Number(s.toastDuration ?? DEFAULT_SETTINGS.toastDuration),
+        };
+    }
+
+    // ===== STATE =====
+    let users = [], currentUser = null, csrfToken = null, currentProjectId = null, currentDetailTaskId = null;
+    let allTasks = [], activeFilterLabel = '';
+    let pollingInterval = null;
+    let isDragging = false; // tránh reload khi đang drag
+    let appSettings = loadSettings();
+
+    function applyStoredSettings() {
+        appSettings = loadSettings();
+        document.documentElement.lang = appSettings.language || 'vi';
+        document.body.classList.toggle('compact-mode', !!appSettings.compact);
+        document.body.classList.toggle('no-animation', !appSettings.animation);
+        applyLanguage();
+
+        const priorityEl = document.getElementById('task-priority');
+        if (priorityEl && !priorityEl.dataset.dirty) priorityEl.value = appSettings.defaultPriority;
+
+        const badge = document.getElementById('realtime-badge');
+        if (badge) {
+            badge.title = appSettings.pollInterval > 0
+                ? `Tự động cập nhật mỗi ${Math.round(appSettings.pollInterval / 1000)} giây`
+                : 'Tự động cập nhật đang tắt';
+        }
+
+        if (currentProjectId) startPolling();
+        if (allTasks.length) rebuildBoard(allTasks);
+    }
+
+    function applyLanguage() {
+        const isEn = appSettings.language === 'en';
+        const text = {
+            board: isEn ? 'Board' : 'Board',
+            projects: isEn ? 'Projects' : 'Projects',
+            settings: isEn ? 'Settings' : 'Setting',
+            createCard: isEn ? 'Create New Card' : 'Tạo Card Mới',
+            title: isEn ? 'Title' : 'Tiêu đề',
+            description: isEn ? 'Description' : 'Mô tả',
+            assignee: isEn ? 'Assignee' : 'Assignee',
+            dueDate: isEn ? 'Due Date' : 'Due Date',
+            label: isEn ? 'Label' : 'Label',
+            create: isEn ? 'Create' : 'Create',
+            filter: isEn ? 'Filter' : 'Filter',
+            allAssignee: isEn ? 'All assignees' : 'Tất cả assignee',
+            allPriority: isEn ? 'All priorities' : 'Tất cả priority',
+            allDue: isEn ? 'All due dates' : 'Tất cả due date',
+            clearFilter: isEn ? 'Clear filter' : 'Xóa filter',
+            archived: isEn ? 'Archived' : 'Archived',
+        };
+
+        document.querySelector('.sidebar-section .sidebar-item.active')?.lastChild && (document.querySelector('.sidebar-section .sidebar-item.active').lastChild.textContent = text.board);
+        const sidebarItems = document.querySelectorAll('.sidebar-item');
+        sidebarItems[1]?.lastChild && (sidebarItems[1].lastChild.textContent = text.projects);
+        sidebarItems[2]?.lastChild && (sidebarItems[2].lastChild.textContent = text.settings);
+        const projectSelect = document.getElementById('projectSelect');
+        document.getElementById('topbar-title').textContent = projectSelect?.selectedOptions[0]?.text || text.board;
+        document.querySelector('.panel-title')?.lastChild && (document.querySelector('.panel-title').lastChild.textContent = text.createCard);
+        const labels = document.querySelectorAll('.create-panel label');
+        if (labels[0]) labels[0].textContent = text.title;
+        if (labels[1]) labels[1].textContent = 'Priority';
+        if (labels[2]) labels[2].textContent = text.description;
+        if (labels[3]) labels[3].textContent = text.assignee;
+        if (labels[4]) labels[4].textContent = text.dueDate;
+        if (labels[5]) labels[5].textContent = text.label;
+        document.getElementById('filter-search').placeholder = isEn ? 'Search...' : 'Tìm kiếm...';
+        document.querySelector('.filter-bar-title')?.lastChild && (document.querySelector('.filter-bar-title').lastChild.textContent = text.filter);
+        document.querySelector('#filter-assignee option[value=""]').textContent = text.allAssignee;
+        document.querySelector('#filter-priority option[value=""]').textContent = text.allPriority;
+        document.querySelector('#filter-due option[value=""]').textContent = text.allDue;
+        document.getElementById('filter-clear-btn')?.lastChild && (document.getElementById('filter-clear-btn').lastChild.textContent = text.clearFilter);
+        const tabButtons = document.querySelectorAll('.tab-btn');
+        if (tabButtons[0]) tabButtons[0].textContent = text.board;
+        if (tabButtons[1]) tabButtons[1].childNodes[0].textContent = text.archived;
+    }
+
+    window.addEventListener('storage', e => {
+        if (e.key === SETTINGS_KEY) applyStoredSettings();
+    });
+
+    // ===== TOAST =====
+    function showToast(msg, type='info', duration) {
+        const icons = { success:'✓', error:'✕', info:'ℹ', warning:'⚠' };
+        const c = document.getElementById('toast-container');
+        const t = document.createElement('div');
+        const timeout = Number(duration ?? appSettings.toastDuration ?? DEFAULT_SETTINGS.toastDuration);
+        t.className = `toast ${type}`;
+        t.innerHTML = `<span class="toast-icon">${icons[type]||'ℹ'}</span><span class="toast-msg">${msg}</span><button class="toast-close" onclick="this.parentElement.remove()">×</button>`;
+        c.appendChild(t);
+        setTimeout(() => { t.style.animation='toastOut .25s ease forwards'; setTimeout(()=>t.remove(),250); }, timeout);
+    }
+
+    // ===== CONFIRM DIALOG =====
+    function showConfirm(title, msg, onConfirm) {
+        const root = document.getElementById('modal-root');
+        const backdrop = document.createElement('div');
+        backdrop.className = 'confirm-backdrop';
+        backdrop.innerHTML = `
+            <div class="confirm-box">
+                <div class="confirm-icon">📦</div>
+                <div class="confirm-title">${title}</div>
+                <div class="confirm-msg">${msg}</div>
+                <div class="confirm-actions">
+                    <button class="btn btn-ghost btn-sm conf-cancel">Hủy</button>
+                    <button class="btn btn-warning btn-sm conf-ok">${title}</button>
+                </div>
+            </div>`;
+        root.appendChild(backdrop);
+        backdrop.querySelector('.conf-cancel').addEventListener('click', () => backdrop.remove());
+        backdrop.querySelector('.conf-ok').addEventListener('click', () => { backdrop.remove(); try { onConfirm(); } catch(e) { console.error(e); } });
+        backdrop.addEventListener('click', e => { if (e.target === backdrop) backdrop.remove(); });
+    }
+
+    // ===== KEYBOARD =====
+    document.addEventListener('keydown', e => {
+        if (e.key === 'Escape') {
+            const dr = document.getElementById('detail-root');
+            if (dr && dr.innerHTML.trim()) { try { closeDetail(); } catch(err) { console.error(err); } }
+            const mr = document.getElementById('modal-root');
+            if (mr && mr.innerHTML.trim()) mr.innerHTML = '';
+        }
+        const tag = document.activeElement.tagName.toLowerCase();
+        if (['input','textarea','select'].includes(tag)) return;
+        if (e.key === 'c' || e.key === 'C') {
+            const input = document.getElementById('task-title');
+            if (input) { document.getElementById('create-panel')?.scrollIntoView({behavior:'smooth',block:'nearest'}); setTimeout(()=>input.focus(),200); }
+            e.preventDefault();
+        }
+        if (e.key === '/') {
+            document.getElementById('filter-search')?.focus();
+            e.preventDefault();
+        }
+    });
+
+    // ===== SIDEBAR MOBILE =====
+    function toggleSidebar() {
+        document.getElementById('sidebar').classList.toggle('open');
+        document.getElementById('sidebar-overlay').classList.toggle('active');
+    }
+    function closeSidebar() {
+        document.getElementById('sidebar').classList.remove('open');
+        document.getElementById('sidebar-overlay').classList.remove('active');
+    }
+
+    // ===== UTILS =====
+    function sleep(ms) { return new Promise(r=>setTimeout(r,ms)); }
+    function getInitials(n) { if(!n)return'?'; return n.split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2); }
+    function escapeHtml(s) { if(!s)return''; return s.replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+    function formatDate(d) {
+        if (!d) return null;
+        const date = new Date(d);
+        if (appSettings.dateFormat === 'yyyy-MM-dd') return date.toISOString().slice(0, 10);
+        const locale = appSettings.dateFormat === 'MM/dd/yyyy' ? 'en-US' : 'vi-VN';
+        return date.toLocaleDateString(locale, { day:'2-digit', month:'2-digit', year:'numeric' });
+    }
+    function timeAgo(d) { if(!d)return''; const dt=new Date(d),now=new Date(),diff=Math.floor((now-dt)/1000); if(diff<60)return'vừa xong'; if(diff<3600)return Math.floor(diff/60)+'p trước'; if(diff<86400)return Math.floor(diff/3600)+'h trước'; return formatDate(d); }
+    function getDueStatus(ds) { if(!ds)return null; const d=Math.ceil((new Date(ds)-new Date())/864e5); return d<0?'overdue':d<=2?'soon':'normal'; }
+    function dueBadgeHtml(ds) { if(!ds || !appSettings.showDueBadge)return''; const s=getDueStatus(ds); return `<span class="due-badge ${s}">${{overdue:'⚠',soon:'🔔',normal:'📅'}[s]} ${formatDate(ds)}</span>`; }
+    function priorityBadge(p) { const cls=(p||'medium').toLowerCase(); return `<span class="priority-badge ${cls}"><span class="dot"></span>${p||'Medium'}</span>`; }
+    function labelStrip(color, h='4px') { if(!color||!LABEL_COLORS[color])return`<div class="card-label-strip" style="height:${h}"></div>`; return `<div class="card-label-strip" style="height:${h};background:${LABEL_COLORS[color]};"></div>`; }
+    function selectLabel(el,pid) { document.querySelectorAll(`#${pid} .label-dot`).forEach(d=>d.classList.remove('selected')); el.classList.add('selected'); }
+    function getSelectedLabel(pid) { const s=document.querySelector(`#${pid} .label-dot.selected`); return s?(s.dataset.color||''):''; }
+    function setSelectedLabel(pid,color) { document.querySelectorAll(`#${pid} .label-dot`).forEach(d=>d.classList.toggle('selected',d.dataset.color===(color||''))); }
+
+    function startPolling() {
+        stopPolling();
+        const interval = Number(appSettings.pollInterval);
+        if (!interval || interval < 0) {
+            setRealtimeStatus('offline');
+            return;
+        }
+        pollingInterval = setInterval(async () => {
+            // Không poll khi đang drag, đang mở detail modal, hoặc chưa có project
+            if (!currentProjectId || isDragging || document.getElementById('detail-root').innerHTML.trim()) return;
+            await silentReload(currentProjectId);
+        }, interval);
+    }
+
+    function stopPolling() {
+        if (pollingInterval) { clearInterval(pollingInterval); pollingInterval = null; }
+    }
+
+    // Silent reload — không show skeleton, chỉ update nếu data thay đổi
+    async function silentReload(projectId) {
+        try {
+            setRealtimeStatus('syncing');
+            const res = await fetch(`/api/taskitems/project/${projectId}`, { credentials:'include' });
+            if (!res.ok) { setRealtimeStatus('live'); return; }
+            const newTasks = await res.json();
+
+            // So sánh data: chỉ re-render nếu có thay đổi thật sự
+            const oldJson = JSON.stringify(allTasks.map(t=>({id:t.id,title:t.title,statusId:t.statusId,priority:t.priority,assigneeId:t.assigneeId,dueDate:t.dueDate,labelColor:t.labelColor,isArchived:t.isArchived})).sort((a,b)=>a.id.localeCompare(b.id)));
+            const newJson = JSON.stringify(newTasks.map(t=>({id:t.id,title:t.title,statusId:t.statusId,priority:t.priority,assigneeId:t.assigneeId,dueDate:t.dueDate,labelColor:t.labelColor,isArchived:t.isArchived})).sort((a,b)=>a.id.localeCompare(b.id)));
+
+            if (oldJson !== newJson) {
+                allTasks = newTasks;
+                rebuildBoard(newTasks);
+                if (appSettings.toastOnPoll) showToast('Board đã được cập nhật', 'info', 2000);
+            } else if (appSettings.toastOnPoll) {
+                showToast('Đã kiểm tra cập nhật board', 'info', 1600);
+            }
+            setRealtimeStatus('live');
+        } catch(e) {
+            setRealtimeStatus('offline');
+        }
+    }
+
+    function setRealtimeStatus(status) {
+        const dot = document.getElementById('realtime-dot');
+        const label = document.getElementById('realtime-label');
+        if (!dot || !label) return;
+        dot.className = 'realtime-dot ' + status;
+        label.textContent = status === 'live' ? 'Live' : status === 'syncing' ? 'Syncing...' : 'Offline';
+    }
+
+    // ===== PROJECT SELECT =====
+    function setProjectSelect(projects) {
+        const sel = document.getElementById('projectSelect');
+        if (!sel) return;
+        sel.innerHTML = '';
+        projects.forEach(p => {
+            const o = document.createElement('option');
+            o.value = p.id;
+            o.textContent = p.name + (p.projectKey ? ' (' + p.projectKey + ')' : '');
+            sel.appendChild(o);
+        });
+        sel.onchange = () => {
+            const pid = sel.value;
+            if (pid) { currentProjectId = pid; localStorage.setItem(CURRENT_PROJECT_KEY, pid); setTopbarTitle(sel.options[sel.selectedIndex]?.text||'Board'); load(pid); }
+        };
+    }
+    function setTopbarTitle(t) { document.getElementById('topbar-title').textContent = t; }
+
+    // ===== FILTER =====
+    function filterByLabel(el) {
+        document.querySelectorAll('.filter-label-dot').forEach(d=>d.classList.remove('active'));
+        el.classList.add('active');
+        activeFilterLabel = el.dataset.color || '';
+        applyFilters();
+    }
+
+    function applyFilters() {
+        const search   = (document.getElementById('filter-search').value||'').toLowerCase().trim();
+        const assigneeF = document.getElementById('filter-assignee').value;
+        const priorityF = document.getElementById('filter-priority').value;
+        const dueF     = document.getElementById('filter-due').value;
+        const labelF   = activeFilterLabel;
+        const hasFilter = !!(search||assigneeF||priorityF||dueF||labelF);
+        document.getElementById('filter-clear-btn').classList.toggle('visible', hasFilter);
+
+        let visibleCount = 0;
+        document.querySelectorAll('.card[data-task-json]').forEach(card => {
+            const task = JSON.parse(card.dataset.taskJson);
+            let show = true;
+            if (search) { const t=(task.title||'').toLowerCase(),d=(task.description||'').toLowerCase(); if(!t.includes(search)&&!d.includes(search)) show=false; }
+            if (show&&assigneeF) { if(assigneeF==='__unassigned__'){if(task.assigneeId)show=false;}else{if(task.assigneeId!==assigneeF)show=false;} }
+            if (show&&priorityF) { if((task.priority||'').toLowerCase()!==priorityF.toLowerCase())show=false; }
+            if (show&&dueF) { const s=getDueStatus(task.dueDate); if(dueF==='overdue'&&s!=='overdue')show=false; else if(dueF==='soon'&&s!=='soon')show=false; else if(dueF==='has_due'&&!task.dueDate)show=false; else if(dueF==='no_due'&&task.dueDate)show=false; }
+            if (show&&labelF!=='') { if((task.labelColor||'')!==labelF)show=false; }
+            card.classList.toggle('hidden', !show);
+
+            const titleEl = card.querySelector('.card-title');
+            if (titleEl) {
+                if (search&&show) { const re=new RegExp(`(${search.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')})`,'gi'); titleEl.innerHTML=escapeHtml(task.title).replace(re,'<mark>$1</mark>'); }
+                else titleEl.textContent = task.title;
+            }
+            if (show) visibleCount++;
+        });
+
+        ['todo','inprogress','done'].forEach(id => {
+            const list    = document.getElementById('list-'+id);
+            const cards   = list.querySelectorAll('.card');
+            const visible = list.querySelectorAll('.card:not(.hidden)').length;
+            const countEl = document.getElementById('count-'+id);
+            if (countEl) countEl.textContent = hasFilter ? `${visible}/${cards.length}` : cards.length;
+
+            // filter empty state
+            let fe = list.querySelector('.filter-empty');
+            if (!fe) {
+                fe = document.createElement('div');
+                fe.className = 'empty-state filter-empty';
+                fe.innerHTML = '<div class="empty-state-icon">🔍</div><div class="empty-state-text">Không có kết quả</div>';
+                list.appendChild(fe);
+            }
+            fe.style.display = (hasFilter && visible === 0 && cards.length > 0) ? '' : 'none';
+        });
+
+        const summary = document.getElementById('filter-summary');
+        if (hasFilter) { summary.textContent=`Hiển thị ${visibleCount}/${allTasks.length} card`; summary.classList.add('active'); }
+        else { summary.textContent=''; summary.classList.remove('active'); }
+    }
+
+    function clearFilters() {
+        document.getElementById('filter-search').value = '';
+        document.getElementById('filter-assignee').value = '';
+        document.getElementById('filter-priority').value = '';
+        document.getElementById('filter-due').value = '';
+        activeFilterLabel = '';
+        document.querySelectorAll('.filter-label-dot').forEach(d=>d.classList.remove('active'));
+        document.querySelector('.filter-label-dot.none-dot')?.classList.add('active');
+        applyFilters();
+    }
+
+    function populateAssigneeFilter() {
+        const sel = document.getElementById('filter-assignee');
+        while (sel.options.length > 2) sel.remove(2);
+        users.forEach(u => { const o=document.createElement('option'); o.value=u.id; o.textContent=u.username; sel.appendChild(o); });
+    }
+
+    // ===== TABS =====
+    function switchTab(tab, btn) {
+        document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+        btn.classList.add('active');
+        document.getElementById('tab-board').style.display   = tab==='board'    ? '' : 'none';
+        document.getElementById('tab-archived').style.display = tab==='archived' ? '' : 'none';
+        if (tab==='archived') loadArchived();
+    }
+
+    // ===== AUTH =====
+    async function fetchCsrfToken(retries=3) {
+        for (let i=0;i<retries;i++) {
+            try { const res=await fetch('/api/antiforgery/token',{credentials:'include'}); if(res.ok){const j=await res.json();csrfToken=j.token;return csrfToken;} } catch(e){}
+            await sleep(300*(i+1));
+        }
+        return null;
+    }
+    async function loadUsers() {
+        try {
+            const res = await fetch('/api/users',{credentials:'include'});
+            if (res.ok) {
+                users = await res.json();
+                const sel = document.getElementById('task-assignee');
+                sel.innerHTML = '<option value="">(Unassigned)</option>';
+                users.forEach(u=>{ const o=document.createElement('option');o.value=u.id;o.textContent=u.username+' ('+u.email+')';sel.appendChild(o); });
+                populateAssigneeFilter();
+            }
+        } catch(e){ console.error(e); }
+    }
+    async function loadCurrentUser() {
+        try {
+            const res = await fetch('/api/auth/me',{credentials:'include'});
+            if (res.ok) {
+                currentUser = await res.json();
+                const name = currentUser.username||currentUser.email||'U';
+                document.getElementById('sidebar-avatar').textContent = getInitials(name);
+                document.getElementById('sidebar-name').textContent = name;
+            }
+        } catch(e){ console.error(e); }
+    }
+    async function ensureProjectForUser() {
+        try {
+            let projects = null;
+            for (let i=0;i<3;i++) { const res=await fetch('/api/projects',{credentials:'include'}); if(res.ok){projects=await res.json();break;} await sleep(200*(i+1)); }
+            if (projects&&projects.length>0) {
+                setProjectSelect(projects);
+                const savedProjectId = localStorage.getItem(CURRENT_PROJECT_KEY);
+                currentProjectId = projects.some(p => p.id === savedProjectId) ? savedProjectId : projects[0].id;
+                localStorage.setItem(CURRENT_PROJECT_KEY, currentProjectId);
+                const sel=document.getElementById('projectSelect'); if(sel)sel.value=currentProjectId;
+                setTopbarTitle(sel?.options[sel.selectedIndex]?.text||'Board'); return;
+            }
+            const defaultName = currentUser?`Project - ${currentUser.username}`:'My Project';
+            const token = csrfToken||await fetchCsrfToken();
+            const headers={'Content-Type':'application/json'}; if(token)headers['X-XSRF-TOKEN']=token;
+            const c = await fetch('/api/projects',{method:'POST',credentials:'include',headers,body:JSON.stringify({name:defaultName,projectKey:'',description:'Auto-created'})});
+            if (c.ok) { const j=await c.json();currentProjectId=j.id;localStorage.setItem(CURRENT_PROJECT_KEY,currentProjectId);const r2=await fetch('/api/projects',{credentials:'include'});if(r2.ok){const p2=await r2.json();setProjectSelect(p2);const s2=document.getElementById('projectSelect');if(s2)s2.value=currentProjectId;setTopbarTitle(s2?.options[s2.selectedIndex]?.text||'Board');} }
+        } catch(e){ console.error(e); }
+    }
+
+    // ===== BOARD =====
+    function updateCounts() {
+        ['todo','inprogress','done'].forEach(id=>{
+            const count = document.getElementById('list-'+id)?.querySelectorAll('.card').length||0;
+            const el = document.getElementById('count-'+id); if(el) el.textContent=count;
+        });
+    }
+
+    function showSkeletons() {
+        ['todo','inprogress','done'].forEach(id=>{
+            const el = document.getElementById('list-'+id);
+            if (el) el.innerHTML = [1,2].map(()=>`<div class="skeleton-card"><div class="skeleton-line" style="height:14px;width:80%;margin-bottom:8px;"></div><div class="skeleton-line" style="height:10px;width:50%;"></div></div>`).join('');
+        });
+    }
+
+    // Hàm đặt empty state cho 1 cột
+    function setColEmpty(colId) {
+        document.getElementById('list-'+colId).innerHTML = EMPTY_STATES[colId];
+    }
+
+    // Full load (có skeleton)
+    async function load(projectId) {
+        showSkeletons();
+        clearFilters();
+        try {
+            const res = await fetch(`/api/taskitems/project/${projectId}`,{credentials:'include'});
+            if (res.status===401) { window.location.href='/login.html'; return; }
+            if (res.status===403) {
+                showToast('Bạn không phải thành viên project này','error');
+                ['todo','inprogress','done'].forEach(id=>{
+                    document.getElementById('list-'+id).innerHTML='<div class="empty-state"><div class="empty-state-icon">🔒</div><div class="empty-state-text">Không có quyền truy cập</div></div>';
+                });
+                return;
+            }
+            allTasks = await res.json();
+            rebuildBoard(allTasks);
+        } catch(err){ console.error(err); showToast('Lỗi tải tasks','error'); }
+    }
+
+    // Rebuild board từ data — dùng cả load() và silentReload()
+    function rebuildBoard(tasks) {
+        // Xóa cards cũ, giữ lại filter-empty nếu có
+        ['todo','inprogress','done'].forEach(id=>{
+            const list = document.getElementById('list-'+id);
+            // xóa hết
+            list.innerHTML = '';
+        });
+
+        if (!tasks.length) {
+            // Set empty state cho từng cột
+            setColEmpty('todo');
+            setColEmpty('inprogress');
+            setColEmpty('done');
+            updateCounts();
+            return;
+        }
+
+        tasks.forEach(task => appendTaskCard(task));
+        updateCounts();
+        applyFilters(); // re-apply filter nếu đang active
+    }
+
+    function appendTaskCard(task) {
+        const el = document.createElement('div');
+        el.className = 'card';
+        el.dataset.id = task.id;
+        el.dataset.taskJson = JSON.stringify(task);
+        el.draggable = true;
+        const aName = task.assigneeName||'';
+        const aCls  = aName ? 'avatar-sm' : 'avatar-sm unassigned';
+        el.innerHTML = `
+            ${labelStrip(task.labelColor)}
+            <div class="card-body">
+                <div class="card-top">
+                    <div class="card-title">${escapeHtml(task.title)}</div>
+                    <div class="card-actions">
+                        <button class="card-btn card-btn-archive" data-action="archive">Archive</button>
+                    </div>
+                </div>
+                <div class="card-meta">${priorityBadge(task.priority)}${dueBadgeHtml(task.dueDate)}</div>
+                <div class="card-footer">
+                    <div class="card-assignee">
+                        <div class="${aCls}">${aName?getInitials(aName):'–'}</div>
+                        ${appSettings.showAssigneeName ? `<span>${escapeHtml(aName||'Unassigned')}</span>` : ''}
+                    </div>
+                </div>
+            </div>`;
+
+        el.querySelector('[data-action="archive"]').onclick = e => { e.stopPropagation(); confirmArchive(task.id, task.title); };
+        el.addEventListener('dragstart', ev => {
+            isDragging = true;
+            ev.dataTransfer.setData('text/plain', task.id);
+            ev.dataTransfer.effectAllowed = 'move';
+        });
+        el.addEventListener('dragend', () => { isDragging = false; });
+        el.addEventListener('click', () => openDetailModal(task.id));
+
+        const listId = task.statusId===1?'list-todo':task.statusId===2?'list-inprogress':'list-done';
+        document.getElementById(listId).appendChild(el);
+    }
+
+    function setupColumns() {
+        document.querySelectorAll('.column').forEach(col => {
+            col.addEventListener('dragover', ev => { ev.preventDefault(); col.classList.add('over'); });
+            col.addEventListener('dragleave', () => col.classList.remove('over'));
+            col.addEventListener('drop', async ev => {
+                ev.preventDefault(); col.classList.remove('over'); isDragging = false;
+                const id     = ev.dataTransfer.getData('text/plain');
+                const status = parseInt(col.dataset.status);
+                const card   = document.querySelector(`.card[data-id='${id}']`);
+                if (card) {
+                    col.querySelector('.col-list').appendChild(card);
+                    const t = JSON.parse(card.dataset.taskJson); t.statusId=status; card.dataset.taskJson=JSON.stringify(t);
+                    // update allTasks array
+                    const idx = allTasks.findIndex(t=>t.id===id);
+                    if (idx>=0) allTasks[idx].statusId = status;
+                }
+                updateCounts();
+                await updateTaskStatus(id, status);
+                if (appSettings.toastOnDrag) showToast(`Đã chuyển sang ${STATUS_NAMES[status]}`,'success',2000);
+            });
+        });
+    }
+
+    // ===== API =====
+    function apiHeaders() { const h={'Content-Type':'application/json'}; if(csrfToken)h['X-XSRF-TOKEN']=csrfToken; return h; }
+
+    async function updateTaskStatus(taskId, statusId) {
+        try {
+            const res = await fetch(`/api/taskitems/${taskId}/status`,{method:'PUT',credentials:'include',headers:apiHeaders(),body:JSON.stringify(statusId)});
+            if (!res.ok) { const txt=await res.text(); if(res.status===400&&txt.toLowerCase().includes('antiforgery')){await fetchCsrfToken();await updateTaskStatus(taskId,statusId);} }
+        } catch(e){ console.error(e); }
+    }
+
+    function confirmArchive(taskId, title) {
+        showConfirm('Archive Card',`Archive card "<b>${escapeHtml(title)}</b>"?<br><span style="font-size:12px;color:var(--text-muted);">Bạn có thể restore lại trong tab Archived.</span>`,()=>archiveTask(taskId));
+    }
+
+    function confirmArchiveDetail(taskId, title) {
+        showConfirm('Archive Card',`Archive card "<b>${escapeHtml(title)}</b>"?<br><span style="font-size:12px;color:var(--text-muted);">Bạn có thể restore lại trong tab Archived.</span>`,async()=>{
+            await archiveTask(taskId);
+            try { closeDetail(); } catch(e){ console.error(e); }
+        });
+    }
+
+    async function archiveTask(taskId) {
+        try {
+            const headers={}; if(csrfToken)headers['X-XSRF-TOKEN']=csrfToken;
+            const res = await fetch(`/api/taskitems/${taskId}`,{method:'DELETE',credentials:'include',headers});
+            if (res.ok) {
+                const card = document.querySelector(`.card[data-id='${taskId}']`);
+                if (card) card.remove();
+                // Cập nhật allTasks
+                allTasks = allTasks.filter(t=>t.id!==taskId);
+                updateCounts();
+                // Set empty state nếu cột trống
+                ['todo','inprogress','done'].forEach(id=>{
+                    const list = document.getElementById('list-'+id);
+                    if (list && list.querySelectorAll('.card').length===0) setColEmpty(id);
+                });
+                const badge = document.getElementById('archived-count-badge');
+                if (badge) { const n=parseInt(badge.textContent||'0')+1; badge.textContent=n; badge.style.display=''; }
+                showToast('Card đã được archive','warning',2500);
+            } else { showToast('Archive thất bại: '+await res.text(),'error'); }
+        } catch(e){ console.error(e); }
+    }
+
+    // ===== DETAIL MODAL =====
+    async function openDetailModal(taskId) {
+        currentDetailTaskId = taskId;
+        stopPolling(); // tạm dừng polling khi mở detail
+        const root = document.getElementById('detail-root');
+        root.innerHTML = '<div class="detail-backdrop"><div style="color:var(--text-muted);margin:auto;font-size:14px;">Đang tải...</div></div>';
+        try {
+            const res = await fetch(`/api/tasks/${taskId}/detail`,{credentials:'include'});
+            if (!res.ok) { root.innerHTML=''; showToast('Không thể tải chi tiết','error'); startPolling(); return; }
+            renderDetailModal(await res.json(), root);
+        } catch(e){ console.error(e); root.innerHTML=''; startPolling(); }
+    }
+
+    function renderDetailModal(data, root) {
+        const {task,checklists,comments} = data;
+        const dueDateVal = task.dueDate ? task.dueDate.split('T')[0] : '';
+        const checked    = checklists.filter(c=>c.isChecked).length;
+        const total      = checklists.length;
+        const pct        = total>0 ? Math.round(checked/total*100) : 0;
+
+        const activities = [];
+        activities.push({type:'create', text:`Card được tạo lúc ${formatDate(task.createdAt)}`});
+        if (task.updatedAt)    activities.push({type:'edit', text:`Cập nhật lần cuối ${formatDate(task.updatedAt)}`});
+        if (task.assigneeName) activities.push({type:'edit', text:`Assigned cho ${escapeHtml(task.assigneeName)}`});
+
+        root.innerHTML = `
+        <div class="detail-backdrop" id="detail-backdrop">
+          <div class="detail-modal">
+            <div class="detail-header">
+              ${labelStrip(task.labelColor,'6px')}
+              <div class="detail-title-row">
+                <textarea class="detail-title-input" id="d-title" rows="1">${escapeHtml(task.title)}</textarea>
+                <button class="detail-close" onclick="closeDetail()">×</button>
+              </div>
+              <div class="detail-status-row">
+                <span class="status-chip">${escapeHtml(STATUS_NAMES[task.statusId]||'?')}</span>
+                ${priorityBadge(task.priority)}
+                ${dueBadgeHtml(task.dueDate)}
+              </div>
+            </div>
+            <div class="detail-body">
+              <div class="detail-left">
+                <div>
+                  <div class="detail-section-title"><svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><path d="M1 3h14v1.5H1V3zm0 4h14v1.5H1V7zm0 4h8v1.5H1V11z"/></svg>Mô tả</div>
+                  <div class="detail-desc" id="d-desc-view" onclick="toggleDescEdit(true)">${escapeHtml(task.description||'')||'<span style="color:var(--text-muted);font-style:italic;">Click để thêm mô tả...</span>'}</div>
+                  <div class="detail-desc-edit" id="d-desc-edit">
+                    <textarea id="d-desc-input" placeholder="Thêm mô tả...">${escapeHtml(task.description||'')}</textarea>
+                    <div class="detail-desc-actions">
+                      <button class="btn btn-primary btn-sm" onclick="saveDesc('${task.id}')">Lưu</button>
+                      <button class="btn btn-ghost btn-sm" onclick="toggleDescEdit(false)">Hủy</button>
+                    </div>
+                  </div>
+                </div>
+                <div>
+                  <div class="detail-section-title"><svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><path d="M13.854 3.646a.5.5 0 010 .708l-7 7a.5.5 0 01-.708 0l-3.5-3.5a.5.5 0 11.708-.708L6.5 10.293l6.646-6.647a.5.5 0 01.708 0z"/></svg>Checklist <span style="color:var(--text-muted);font-weight:400;text-transform:none;letter-spacing:0;">${checked}/${total}</span></div>
+                  ${total>0?`<div class="checklist-progress"><div class="checklist-progress-text">${pct}%</div><div class="checklist-progress-bar-wrap"><div class="checklist-progress-bar" style="width:${pct}%"></div></div></div>`:''}
+                  <div class="checklist-items" id="checklist-items">${checklists.map(c=>`<div class="checklist-item" id="ci-${c.id}"><input type="checkbox" class="checklist-cb" ${c.isChecked?'checked':''} onchange="toggleChecklist('${c.id}',this.checked)"><span class="checklist-text ${c.isChecked?'done':''}" onclick="toggleLocalChecklist('${c.id}')">${escapeHtml(c.content)}</span><button class="checklist-delete" onclick="deleteChecklist('${c.id}')">×</button></div>`).join('')}</div>
+                  <div class="checklist-add-row"><input id="new-checklist-input" placeholder="Thêm việc cần làm..." onkeydown="if(event.key==='Enter'){addChecklist('${task.id}');}"/><button class="btn btn-ghost btn-sm" onclick="addChecklist('${task.id}')">Thêm</button></div>
+                </div>
+                <div>
+                  <div class="detail-section-title"><svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><path d="M14 1a1 1 0 011 1v8a1 1 0 01-1 1H4.414A2 2 0 003 11.586l-2 2V2a1 1 0 011-1h12z"/></svg>Bình luận (${comments.length})</div>
+                  <div class="comment-list" id="comment-list">${comments.map(c=>renderCommentHtml(c)).join('')}</div>
+                  <div class="new-comment-row">
+                    <div class="comment-avatar">${getInitials(currentUser?.username||'U')}</div>
+                    <div class="new-comment-wrap">
+                      <textarea id="new-comment-input" placeholder="Viết bình luận... (Enter để gửi)" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();addComment('${task.id}');}"></textarea>
+                      <div style="display:flex;gap:6px;align-items:center;">
+                        <button class="btn btn-primary btn-sm" onclick="addComment('${task.id}')">Gửi</button>
+                        <span style="font-size:11px;color:var(--text-muted);">Enter để gửi · Shift+Enter xuống dòng</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div>
+                  <div class="detail-section-title"><svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0a8 8 0 100 16A8 8 0 008 0zm.75 4.75v4.5l3.5 2-.75 1.25L7.25 10V4.75h1.5z"/></svg>Hoạt động</div>
+                  <div class="activity-list">${activities.map(a=>`<div class="activity-item"><div class="activity-dot ${a.type}"></div><span>${a.text}</span></div>`).join('')}</div>
+                </div>
+              </div>
+              <div class="detail-right">
+                <div class="detail-right-section">
+                  <div class="detail-right-label">Assignee</div>
+                  <select class="detail-select" id="d-assignee" style="width:100%;"><option value="">(Unassigned)</option>${users.map(u=>`<option value="${u.id}" ${task.assigneeId===u.id?'selected':''}>${escapeHtml(u.username)}</option>`).join('')}</select>
+                </div>
+                <div class="detail-right-section">
+                  <div class="detail-right-label">Priority</div>
+                  <select class="detail-select" id="d-priority" style="width:100%;"><option ${task.priority==='Low'?'selected':''}>Low</option><option ${task.priority==='Medium'?'selected':''}>Medium</option><option ${task.priority==='High'?'selected':''}>High</option></select>
+                </div>
+                <div class="detail-right-section">
+                  <div class="detail-right-label">Due Date</div>
+                  <input type="date" class="detail-date-input" id="d-duedate" value="${dueDateVal}" style="width:100%;"/>
+                </div>
+                <div class="detail-right-section">
+                  <div class="detail-right-label">Label</div>
+                  <div class="detail-label-picker" id="d-label-picker">
+                    <div class="detail-label-dot none ${!task.labelColor?'selected':''}" data-color="" onclick="selectDetailLabel(this)"></div>
+                    ${Object.entries(LABEL_COLORS).map(([k,v])=>`<div class="detail-label-dot ${task.labelColor===k?'selected':''}" data-color="${k}" style="background:${v}" onclick="selectDetailLabel(this)"></div>`).join('')}
+                  </div>
+                </div>
+                <div class="detail-right-section">
+                  <div class="detail-right-label">Status</div>
+                  <select class="detail-select" id="d-status" style="width:100%;"><option value="1" ${task.statusId===1?'selected':''}>To Do</option><option value="2" ${task.statusId===2?'selected':''}>In Progress</option><option value="3" ${task.statusId===3?'selected':''}>Done</option></select>
+                </div>
+                <button class="btn btn-primary btn-sm save-meta-btn" onclick="saveMeta('${task.id}')">💾 Lưu thay đổi</button>
+                <div style="border-top:1px solid var(--border);padding-top:12px;">
+                  <div class="detail-right-label" style="margin-bottom:6px;">Thông tin</div>
+                  <div style="font-size:12px;color:var(--text-muted);line-height:1.9;">
+                    Tạo: ${formatDate(task.createdAt)}<br>
+                    ${task.updatedAt?'Sửa: '+formatDate(task.updatedAt)+'<br>':''}
+                    ${task.assigneeName?'Assignee: '+escapeHtml(task.assigneeName):''}
+                  </div>
+                </div>
+                <div style="border-top:1px solid var(--border);padding-top:12px;">
+                  <button class="btn btn-ghost btn-sm" style="width:100%;color:var(--accent-yellow);border-color:rgba(210,153,34,.3);" onclick="confirmArchiveDetail('${task.id}','${escapeHtml(task.title)}')">📦 Archive card</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>`;
+
+        document.getElementById('detail-backdrop').addEventListener('click', e=>{ if(e.target.id==='detail-backdrop') closeDetail(); });
+        const titleEl = document.getElementById('d-title');
+        titleEl.style.height='auto'; titleEl.style.height=titleEl.scrollHeight+'px';
+        titleEl.addEventListener('input',()=>{ titleEl.style.height='auto'; titleEl.style.height=titleEl.scrollHeight+'px'; });
+    }
+
+    function renderCommentHtml(c) {
+        const isOwn = currentUser&&c.authorId===currentUser.id;
+        return `<div class="comment-item" id="comment-${c.id}"><div class="comment-avatar">${getInitials(c.authorName||'?')}</div><div class="comment-bubble"><div class="comment-meta"><span class="comment-author">${escapeHtml(c.authorName||'Unknown')}</span><span class="comment-time">${timeAgo(c.createdAt)}${c.updatedAt?' (đã sửa)':''}</span></div><div class="comment-content" id="cc-${c.id}">${escapeHtml(c.content)}</div>${isOwn?`<div class="comment-actions-row"><button class="comment-action-btn" onclick="toggleCommentEdit('${c.id}',true)">Sửa</button><button class="comment-action-btn" onclick="deleteComment('${c.id}')">Xóa</button></div><div class="comment-edit-area" id="ce-${c.id}"><textarea id="ce-txt-${c.id}">${escapeHtml(c.content)}</textarea><div style="display:flex;gap:6px;"><button class="btn btn-primary btn-sm" onclick="saveComment('${c.id}')">Lưu</button><button class="btn btn-ghost btn-sm" onclick="toggleCommentEdit('${c.id}',false)">Hủy</button></div></div>`:''}</div></div>`;
+    }
+
+    function closeDetail() {
+        document.getElementById('detail-root').innerHTML = '';
+        currentDetailTaskId = null;
+        startPolling(); // resume polling
+        load(currentProjectId);
+    }
+
+    function selectDetailLabel(el) { document.querySelectorAll('#d-label-picker .detail-label-dot').forEach(d=>d.classList.remove('selected')); el.classList.add('selected'); }
+    function toggleDescEdit(show) { document.getElementById('d-desc-view').style.display=show?'none':''; document.getElementById('d-desc-edit').style.display=show?'flex':'none'; if(show)document.getElementById('d-desc-input').focus(); }
+
+    async function saveDesc(taskId) {
+        const desc       = document.getElementById('d-desc-input').value.trim();
+        const title      = document.getElementById('d-title').value.trim();
+        const priority   = document.getElementById('d-priority')?.value||'High';
+        const assigneeId = document.getElementById('d-assignee')?.value||null;
+        const duedate    = document.getElementById('d-duedate')?.value||null;
+        const labelColor = document.querySelector('#d-label-picker .detail-label-dot.selected')?.dataset.color||null;
+        await fetch(`/api/taskitems/${taskId}`,{method:'PUT',credentials:'include',headers:apiHeaders(),body:JSON.stringify({title,description:desc,priority,assigneeId:assigneeId||null,dueDate:duedate?new Date(duedate).toISOString():null,labelColor:labelColor||null})});
+        document.getElementById('d-desc-view').innerHTML = desc||'<span style="color:var(--text-muted);font-style:italic;">Click để thêm mô tả...</span>';
+        toggleDescEdit(false);
+        showToast('Đã lưu mô tả','success',2000);
+    }
+
+    async function saveMeta(taskId) {
+        const title      = document.getElementById('d-title').value.trim();
+        const desc       = document.getElementById('d-desc-input').value.trim()||document.getElementById('d-desc-view').textContent.trim();
+        const priority   = document.getElementById('d-priority').value;
+        const assigneeId = document.getElementById('d-assignee').value||null;
+        const dueDateRaw = document.getElementById('d-duedate').value;
+        const labelColor = document.querySelector('#d-label-picker .detail-label-dot.selected')?.dataset.color||null;
+        const newStatusId= parseInt(document.getElementById('d-status').value);
+        const [r1,r2] = await Promise.all([
+            fetch(`/api/taskitems/${taskId}`,{method:'PUT',credentials:'include',headers:apiHeaders(),body:JSON.stringify({title,description:desc,priority,assigneeId,dueDate:dueDateRaw?new Date(dueDateRaw).toISOString():null,labelColor:labelColor||null})}),
+            fetch(`/api/taskitems/${taskId}/status`,{method:'PUT',credentials:'include',headers:apiHeaders(),body:JSON.stringify(newStatusId)})
+        ]);
+        if (r1.ok&&r2.ok) {
+            showToast('Đã lưu thay đổi','success');
+            try { closeDetail(); } catch(e){ console.error(e); }
+        } else {
+            showToast('Lưu thất bại','error');
+        }
+    }
+
+    async function addChecklist(taskId) {
+        const input=document.getElementById('new-checklist-input'); const content=input.value.trim(); if(!content)return;
+        try {
+            const res=await fetch(`/api/tasks/${taskId}/checklists`,{method:'POST',credentials:'include',headers:apiHeaders(),body:JSON.stringify({content})});
+            if(res.ok){
+                const item=await res.json(); input.value='';
+                const c=document.getElementById('checklist-items');
+                const d=document.createElement('div'); d.className='checklist-item'; d.id='ci-'+item.id;
+                d.innerHTML=`<input type="checkbox" class="checklist-cb" ${item.isChecked?'checked':''} onchange="toggleChecklist('${item.id}',this.checked)"><span class="checklist-text ${item.isChecked?'done':''}" onclick="toggleLocalChecklist('${item.id}')">${escapeHtml(item.content)}</span><button class="checklist-delete" onclick="deleteChecklist('${item.id}')">×</button>`;
+                c.appendChild(d); updateChecklistProgress();
+            }
+        } catch(e){ console.error(e); }
+    }
+    async function toggleChecklist(checklistId, isChecked) {
+        try {
+            const res=await fetch(`/api/tasks/checklists/${checklistId}`,{method:'PUT',credentials:'include',headers:apiHeaders(),body:JSON.stringify({isChecked})});
+            if(res.ok){
+                const el=document.getElementById('ci-'+checklistId);
+                if(el){ const t=el.querySelector('.checklist-text'); if(t)t.classList.toggle('done',isChecked); const cb=el.querySelector('.checklist-cb'); if(cb)cb.checked=isChecked; }
+                updateChecklistProgress();
+            }
+        } catch(e){ console.error(e); }
+    }
+    function toggleLocalChecklist(checklistId) { const el=document.getElementById('ci-'+checklistId); if(!el)return; const cb=el.querySelector('.checklist-cb'); if(cb)cb.click(); }
+    async function deleteChecklist(checklistId) {
+        try { const h={}; if(csrfToken)h['X-XSRF-TOKEN']=csrfToken; const res=await fetch(`/api/tasks/checklists/${checklistId}`,{method:'DELETE',credentials:'include',headers:h}); if(res.ok){document.getElementById('ci-'+checklistId)?.remove();updateChecklistProgress();} } catch(e){console.error(e);}
+    }
+    function updateChecklistProgress() {
+        const total=document.querySelectorAll('#checklist-items .checklist-item').length;
+        const checked=document.querySelectorAll('#checklist-items .checklist-cb:checked').length;
+        const pct=total>0?Math.round(checked/total*100):0;
+        const bar=document.querySelector('.checklist-progress-bar'); const txt=document.querySelector('.checklist-progress-text'); const span=document.querySelector('.detail-section-title span');
+        if(bar)bar.style.width=pct+'%'; if(txt)txt.textContent=pct+'%'; if(span)span.textContent=`${checked}/${total}`;
+    }
+    async function addComment(taskId) {
+        const input=document.getElementById('new-comment-input'); const content=input.value.trim(); if(!content)return;
+        try {
+            const res=await fetch(`/api/tasks/${taskId}/comments`,{method:'POST',credentials:'include',headers:apiHeaders(),body:JSON.stringify({content})});
+            if(res.ok){ const c=await res.json(); input.value=''; const list=document.getElementById('comment-list'); const d=document.createElement('div'); d.innerHTML=renderCommentHtml(c); list.appendChild(d.firstElementChild); showToast('Đã gửi bình luận','success',2000); }
+        } catch(e){ console.error(e); }
+    }
+    function toggleCommentEdit(commentId, show) {
+        document.getElementById('cc-'+commentId).style.display=show?'none':'';
+        const ea=document.getElementById('ce-'+commentId); if(ea){ea.style.display=show?'flex':'none'; if(show)document.getElementById('ce-txt-'+commentId).focus();}
+    }
+    async function saveComment(commentId) {
+        const content=document.getElementById('ce-txt-'+commentId).value.trim(); if(!content)return;
+        try {
+            const res=await fetch(`/api/tasks/comments/${commentId}`,{method:'PUT',credentials:'include',headers:apiHeaders(),body:JSON.stringify({content})});
+            if(res.ok){ document.getElementById('cc-'+commentId).textContent=content; document.getElementById('cc-'+commentId).style.display=''; document.getElementById('ce-'+commentId).style.display='none'; showToast('Đã cập nhật bình luận','success',2000); }
+        } catch(e){ console.error(e); }
+    }
+    async function deleteComment(commentId) {
+        showConfirm('Xóa bình luận','Bạn có chắc muốn xóa bình luận này?',async()=>{
+            try { const h={}; if(csrfToken)h['X-XSRF-TOKEN']=csrfToken; const res=await fetch(`/api/tasks/comments/${commentId}`,{method:'DELETE',credentials:'include',headers:h}); if(res.ok){document.getElementById('comment-'+commentId)?.remove();showToast('Đã xóa bình luận','info',2000);} } catch(e){console.error(e);}
+        });
+    }
+
+    // ===== ARCHIVED =====
+    async function loadArchived() {
+        const list=document.getElementById('archived-list');
+        list.innerHTML='<div class="empty-state"><div class="empty-state-icon">⏳</div><div class="empty-state-text">Đang tải...</div></div>';
+        try {
+            const res=await fetch(`/api/taskitems/project/${currentProjectId}/archived`,{credentials:'include'});
+            if(!res.ok){list.innerHTML='<div class="empty-state"><div class="empty-state-icon">❌</div><div class="empty-state-text">Lỗi tải dữ liệu</div></div>';return;}
+            const data=await res.json();
+            const badge=document.getElementById('archived-count-badge');
+            if(data.length){badge.textContent=data.length;badge.style.display='';}else{badge.style.display='none';}
+            if(!data.length){list.innerHTML='<div class="empty-state"><div class="empty-state-icon">📦</div><div class="empty-state-text">Chưa có card nào được archive</div></div>';return;}
+            list.innerHTML='';
+            data.forEach(task=>{
+                const el=document.createElement('div'); el.className='archived-item';
+                el.innerHTML=`<div class="archived-item-info"><div class="archived-item-title">${escapeHtml(task.title)}</div><div class="archived-item-meta">${task.priority?'Priority: '+task.priority:''}${task.dueDate?' · Due: '+formatDate(task.dueDate):''}${task.assigneeName?' · '+escapeHtml(task.assigneeName):''}</div></div><button class="btn-restore" onclick="restoreTask('${task.id}')">↩ Restore</button>`;
+                list.appendChild(el);
+            });
+        } catch(e){ console.error(e); }
+    }
+    async function restoreTask(taskId) {
+        try {
+            const res=await fetch(`/api/taskitems/${taskId}/restore`,{method:'PUT',credentials:'include',headers:apiHeaders(),body:'{}'});
+            if(res.ok){showToast('Đã restore card','success');loadArchived();load(currentProjectId);}
+            else showToast('Restore thất bại','error');
+        } catch(e){ console.error(e); }
+    }
+
+    // ===== CREATE =====
+    async function performCreate(payload, retryOn403=true) {
+        const res=await fetch('/api/taskitems',{method:'POST',credentials:'include',headers:apiHeaders(),body:JSON.stringify(payload)});
+        if(res.ok)return res; const txt=await res.text();
+        if(res.status===401){window.location.href='/login.html';return res;}
+        if(res.status===403&&retryOn403){await ensureProjectForUser();return performCreate(payload,false);}
+        if(res.status===400&&txt.toLowerCase().includes('antiforgery')){await fetchCsrfToken();return fetch('/api/taskitems',{method:'POST',credentials:'include',headers:apiHeaders(),body:JSON.stringify(payload)});}
+        showToast('Tạo card thất bại: '+txt,'error'); return res;
+    }
+
+    document.getElementById('btn-create').addEventListener('click', async e=>{
+        const btn=e.currentTarget; btn.disabled=true; btn.textContent='Đang tạo...';
+        const title=document.getElementById('task-title').value.trim();
+        if(!title||!currentProjectId){showToast('Vui lòng nhập tiêu đề','warning');btn.disabled=false;btn.textContent='Create';return;}
+        try {
+            const ddr=document.getElementById('task-duedate').value;
+            const res=await performCreate({projectId:currentProjectId,title,description:document.getElementById('task-desc').value.trim(),priority:document.getElementById('task-priority').value,statusId:1,assigneeId:document.getElementById('task-assignee').value||null,dueDate:ddr?new Date(ddr).toISOString():null,labelColor:getSelectedLabel('create-label-picker')||null},true);
+            if(res&&res.ok){
+                document.getElementById('task-title').value='';document.getElementById('task-desc').value='';
+                document.getElementById('task-priority').value=appSettings.defaultPriority;document.getElementById('task-priority').dataset.dirty='';document.getElementById('task-assignee').value='';
+                document.getElementById('task-duedate').value='';setSelectedLabel('create-label-picker','');
+                load(currentProjectId);showToast('Đã tạo card mới','success');
+            }
+        } catch(err){console.error(err);showToast('Lỗi tạo card','error');}
+        btn.disabled=false;
+        btn.innerHTML='<svg width="12" height="12" viewBox="0 0 16 16" fill="white"><path d="M8 2a.5.5 0 01.5.5v5h5a.5.5 0 010 1h-5v5a.5.5 0 01-1 0v-5h-5a.5.5 0 010-1h5v-5A.5.5 0 018 2z"/></svg>Create';
+    });
+
+    function logout() { window.location.href='/api/auth/signout-redirect?returnUrl=/login.html'; }
+
+    document.getElementById('task-priority')?.addEventListener('change', e => {
+        e.currentTarget.dataset.dirty = '1';
+    });
+
+    // ===== INIT =====
+    (async function(){
+        applyStoredSettings();
+        await loadCurrentUser();
+        await fetchCsrfToken();
+        await loadUsers();
+        await ensureProjectForUser();
+        setupColumns();
+        if (currentProjectId) {
+            await load(currentProjectId);
+            startPolling();
+        }
+    })();
+    </script>
+</body>
+</html>

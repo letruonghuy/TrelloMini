@@ -1,0 +1,7 @@
+wwwroot\html\settings.html
+wwwroot\html\projects.html
+wwwroot\html\dashboard.html
+wwwroot\css\settings.css
+wwwroot\css\project.css
+wwwroot\html\login.html
+wwwroot\css\dashboard.css

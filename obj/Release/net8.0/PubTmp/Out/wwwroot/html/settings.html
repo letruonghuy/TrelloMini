@@ -1,0 +1,1076 @@
+<!DOCTYPE html>
+<html lang="vi" data-theme="dark">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>TrelloMini - Settings</title>
+    <link rel="stylesheet" href="/css/settings.css" />
+</head>
+<body>
+
+    <div id="toast-container"></div>
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+        <div class="sidebar-logo">
+            <div class="logo-icon">TM</div>
+            <span class="logo-text">TrelloMini</span>
+        </div>
+        <div class="sidebar-section">
+            <div class="sidebar-label">Workspace</div>
+            <a class="sidebar-item" href="/dashboard.html">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M1 3h14v1.5H1V3zm0 4h14v1.5H1V7zm0 4h8v1.5H1V11z" /></svg>
+                Board
+            </a>
+            <a class="sidebar-item" href="/projects.html">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M2 2h5v5H2V2zm0 7h5v5H2V9zm7-7h5v5H9V2zm0 7h5v5H9V9z" /></svg>
+                Projects
+            </a>
+            
+        </div>
+        <div class="divider"></div>
+        <div class="sidebar-footer">
+            <a class="sidebar-item active" href="/settings.html">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M8 4.754a3.246 3.246 0 100 6.492 3.246 3.246 0 000-6.492zM5.754 8a2.246 2.246 0 114.492 0 2.246 2.246 0 01-4.492 0z" /><path d="M9.796 1.343c-.527-1.79-3.065-1.79-3.592 0l-.094.319a.873.873 0 01-1.255.52l-.292-.16c-1.64-.892-3.433.902-2.54 2.541l.159.292a.873.873 0 01-.52 1.255l-.319.094c-1.79.527-1.79 3.065 0 3.592l.319.094a.873.873 0 01.52 1.255l-.16.292c-.892 1.64.901 3.434 2.541 2.54l.292-.159a.873.873 0 011.255.52l.094.319c.527 1.79 3.065 1.79 3.592 0l.094-.319a.873.873 0 011.255-.52l.292.16c1.64.893 3.434-.902 2.54-2.541l-.159-.292a.873.873 0 01.52-1.255l.319-.094c1.79-.527 1.79-3.065 0-3.592l-.319-.094a.873.873 0 01-.52-1.255l.16-.292c.893-1.64-.902-3.433-2.541-2.54l-.292.159a.873.873 0 01-1.255-.52l-.094-.319zm-2.633.283c.246-.835 1.428-.835 1.674 0l.094.319a1.873 1.873 0 002.693 1.115l.291-.16c.764-.415 1.6.42 1.184 1.185l-.159.292a1.873 1.873 0 001.116 2.692l.318.094c.835.246.835 1.428 0 1.674l-.319.094a1.873 1.873 0 00-1.115 2.693l.16.291c.415.764-.42 1.6-1.185 1.184l-.291-.159a1.873 1.873 0 00-2.693 1.116l-.094.318c-.246.835-1.428.835-1.674 0l-.094-.319a1.873 1.873 0 00-2.692-1.115l-.292.16c-.764.415-1.6-.42-1.184-1.185l.159-.291A1.873 1.873 0 003.06 9.377l-.319-.094c-.835-.246-.835-1.428 0-1.674l.319-.094A1.873 1.873 0 004.175 5.02l-.16-.292c-.415-.764.42-1.6 1.185-1.184l.292.159a1.873 1.873 0 002.692-1.115l.094-.319z" /></svg>
+                Setting
+            </a>
+            <div class="user-chip">
+                <div class="avatar" id="sidebar-avatar">U</div>
+                <div style="flex:1;min-width:0;">
+                    <div style="font-size:13px;font-weight:500;color:var(--text-primary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;" id="sidebar-name">User</div>
+                    <div style="font-size:11px;color:var(--text-muted);">Member</div>
+                </div>
+                <button class="btn btn-ghost" onclick="logout()" style="padding:4px 8px;font-size:12px;">Logout</button>
+            </div>
+        </div>
+    </aside>
+
+    <!-- MAIN -->
+    <div class="main">
+        <header class="topbar">
+            <div class="topbar-left">
+                <span style="color:var(--text-muted);">TrelloMini</span>
+                <span class="breadcrumb-sep">›</span>
+                <span class="topbar-title">Settings</span>
+            </div>
+        </header>
+
+        <div class="content">
+            <div class="page-header">
+                <h1>Settings</h1>
+                <p>Quản lý tài khoản và tuỳ chỉnh trải nghiệm của bạn</p>
+            </div>
+
+            <!-- ===== 1. PROFILE ===== -->
+            <div class="settings-section profile-section">
+                <div class="section-header">
+                    <div class="section-header-left">
+                        <div class="section-icon blue">👤</div>
+                        <div>
+                            <div class="section-title">Hồ sơ</div>
+                            <div class="section-subtitle">Tuỳ chỉnh thông tin cá nhân của bạn</div>
+                        </div>
+                    </div>
+                    <button class="btn btn-ghost btn-sm" onclick="logout()" id="btn-logout">
+                        <svg width="13" height="13" viewBox="0 0 16 16" fill="currentColor"><path d="M10 12.5a.5.5 0 01-.5.5h-8a.5.5 0 01-.5-.5v-9a.5.5 0 01.5-.5h8a.5.5 0 01.5.5v2a.5.5 0 001 0v-2A1.5 1.5 0 009.5 2h-8A1.5 1.5 0 000 3.5v9A1.5 1.5 0 001.5 14h8a1.5 1.5 0 001.5-1.5v-2a.5.5 0 00-1 0v2z" /><path d="M15.854 8.354a.5.5 0 000-.708l-3-3a.5.5 0 00-.708.708L14.293 7.5H5.5a.5.5 0 000 1h8.793l-2.147 2.146a.5.5 0 00.708.708l3-3z" /></svg>
+                        Đăng xuất
+                    </button>
+                </div>
+
+                <!-- ── Avatar + Name ── -->
+                <div class="profile-hero">
+                    <!-- Avatar with edit overlay -->
+                    <div class="profile-avatar-wrap">
+                        <div class="profile-avatar-lg" id="profile-avatar">U</div>
+                        <button class="avatar-edit-btn" id="btn-avatar-edit" title="Đổi màu avatar" onclick="openGradientPicker()">
+                            <svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><path d="M12.146.146a.5.5 0 01.708 0l3 3a.5.5 0 010 .708l-10 10a.5.5 0 01-.168.11l-5 2a.5.5 0 01-.65-.65l2-5a.5.5 0 01.11-.168l10-10zM11.207 2.5L13.5 4.793 14.793 3.5 12.5 1.207 11.207 2.5zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 01.5.5v.5h.5a.5.5 0 01.5.5v.5h.293l6.5-6.5zm-9.761 5.175l-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 015 12.5V12h-.5a.5.5 0 01-.5-.5V11h-.5a.5.5 0 01-.468-.325z"/></svg>
+                        </button>
+                    </div>
+
+                    <!-- Name + email + badge -->
+                    <div class="profile-hero-info">
+                        <!-- Display name view -->
+                        <div class="profile-name-row" id="name-view-row">
+                            <span class="profile-name-display" id="profile-name">Đang tải...</span>
+                            <button class="icon-btn" id="btn-edit-name" title="Sửa tên" onclick="startEditName()">
+                                <svg width="13" height="13" viewBox="0 0 16 16" fill="currentColor"><path d="M12.146.146a.5.5 0 01.708 0l3 3a.5.5 0 010 .708l-10 10a.5.5 0 01-.168.11l-5 2a.5.5 0 01-.65-.65l2-5a.5.5 0 01.11-.168l10-10zM11.207 2.5L13.5 4.793 14.793 3.5 12.5 1.207 11.207 2.5zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 01.5.5v.5h.5a.5.5 0 01.5.5v.5h.293l6.5-6.5zm-9.761 5.175l-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 015 12.5V12h-.5a.5.5 0 01-.5-.5V11h-.5a.5.5 0 01-.468-.325z"/></svg>
+                            </button>
+                        </div>
+                        <!-- Display name edit -->
+                        <div class="profile-name-edit-row" id="name-edit-row" style="display:none;">
+                            <input type="text" class="name-edit-input" id="input-name" maxlength="40" placeholder="Nhập tên hiển thị..." />
+                            <button class="btn btn-primary btn-sm" onclick="saveName()">Lưu</button>
+                            <button class="btn btn-ghost btn-sm" onclick="cancelEditName()">Hủy</button>
+                        </div>
+
+                        <div class="profile-email-row">
+                            <span class="profile-email" id="profile-email">—</span>
+                        </div>
+
+                        <div class="profile-badges-row">
+                            <span class="profile-badge badge-google">
+                                <svg width="11" height="11" viewBox="0 0 16 16" fill="currentColor"><path d="M15.545 6.558a9.42 9.42 0 010 2.884c-.065.46-.133.879-.212 1.28H8.164v-3.09h4.27c-.19-.979-.733-1.815-1.559-2.373l2.444-1.9a7.997 7.997 0 012.226 3.2zM8.164 16c2.117 0 3.895-.7 5.193-1.895l-2.444-1.9c-.695.467-1.582.742-2.749.742a4.794 4.794 0 01-4.506-3.307H1.12l-2.52 1.953A8 8 0 008.164 16zm-4.506-5.36a4.843 4.843 0 010-3.08l-2.52-1.953A8 8 0 000 8c0 1.295.31 2.52.858 3.593l2.8-2.953zM8.164 3.182c1.217 0 2.314.42 3.177 1.24l2.383-2.384C12.055.797 10.277 0 8.164 0A8 8 0 001.12 4.407l2.8 2.952a4.794 4.794 0 014.244-4.177z"/></svg>
+                                Google Account
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ── Stats Row ── -->
+                <div class="profile-stats-row">
+                    <div class="stat-card">
+                        <div class="stat-icon">📁</div>
+                        <div class="stat-body">
+                            <div class="stat-value" id="stat-projects">—</div>
+                            <div class="stat-label">Projects tham gia</div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">✅</div>
+                        <div class="stat-body">
+                            <div class="stat-value" id="stat-tasks">—</div>
+                            <div class="stat-label">Tasks đang giao</div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">📅</div>
+                        <div class="stat-body">
+                            <div class="stat-value" id="stat-joined">—</div>
+                            <div class="stat-label">Ngày tham gia</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ── Google Account Info ── -->
+                <div class="google-info-block">
+                    <div class="google-info-header">
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" style="color:var(--accent-blue);"><path d="M15.545 6.558a9.42 9.42 0 010 2.884c-.065.46-.133.879-.212 1.28H8.164v-3.09h4.27c-.19-.979-.733-1.815-1.559-2.373l2.444-1.9a7.997 7.997 0 012.226 3.2zM8.164 16c2.117 0 3.895-.7 5.193-1.895l-2.444-1.9c-.695.467-1.582.742-2.749.742a4.794 4.794 0 01-4.506-3.307H1.12l-2.52 1.953A8 8 0 008.164 16zm-4.506-5.36a4.843 4.843 0 010-3.08l-2.52-1.953A8 8 0 000 8c0 1.295.31 2.52.858 3.593l2.8-2.953zM8.164 3.182c1.217 0 2.314.42 3.177 1.24l2.383-2.384C12.055.797 10.277 0 8.164 0A8 8 0 001.12 4.407l2.8 2.952a4.794 4.794 0 014.244-4.177z"/></svg>
+                        Thông tin tài khoản Google
+                    </div>
+                    <div class="google-info-rows">
+                        <div class="google-info-row">
+                            <span class="gi-key">Email</span>
+                            <span class="gi-val" id="gi-email">—</span>
+                        </div>
+                        <div class="google-info-row">
+                            <span class="gi-key">Tên hiển thị</span>
+                            <span class="gi-val" id="gi-name">—</span>
+                        </div>
+                        <div class="google-info-row">
+                            <span class="gi-key">Phương thức đăng nhập</span>
+                            <span class="gi-val"><span class="gi-provider-badge">Google OAuth 2.0</span></span>
+                        </div>
+                        <div class="google-info-row">
+                            <span class="gi-key">Tài khoản tạo lúc</span>
+                            <span class="gi-val" id="gi-created">—</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ── Gradient Picker Modal (inline) ── -->
+                <div class="gradient-picker-backdrop" id="gradient-backdrop" style="display:none;" onclick="closeGradientPicker(event)">
+                    <div class="gradient-picker-panel" id="gradient-panel">
+                        <div class="gp-header">
+                            <span class="gp-title">🎨 Chọn màu Avatar</span>
+                            <button class="gp-close" onclick="closeGradientPicker()">×</button>
+                        </div>
+                        <div class="gp-preview-wrap">
+                            <div class="gp-avatar-preview" id="gp-preview">U</div>
+                        </div>
+                        <div class="gp-section-label">Gradient preset</div>
+                        <div class="gp-swatches" id="gp-swatches"></div>
+                        <div class="gp-section-label" style="margin-top:16px;">Tuỳ chỉnh (2 màu)</div>
+                        <div class="gp-custom-row">
+                            <div class="gp-custom-item">
+                                <label class="gp-clr-label">Từ</label>
+                                <input type="color" id="gp-color-from" class="gp-color-input" value="#1f6feb" oninput="onCustomGradientChange()" />
+                            </div>
+                            <div class="gp-custom-item">
+                                <label class="gp-clr-label">Đến</label>
+                                <input type="color" id="gp-color-to" class="gp-color-input" value="#8957e5" oninput="onCustomGradientChange()" />
+                            </div>
+                            <div class="gp-custom-item" style="align-self:flex-end;">
+                                <select id="gp-direction" class="setting-select" style="min-width:120px;" onchange="onCustomGradientChange()">
+                                    <option value="135deg">↘ Chéo</option>
+                                    <option value="90deg">→ Ngang</option>
+                                    <option value="180deg">↓ Dọc</option>
+                                    <option value="45deg">↗ Chéo ngược</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="gp-actions">
+                            <button class="btn btn-ghost btn-sm" onclick="closeGradientPicker()">Hủy</button>
+                            <button class="btn btn-primary btn-sm" onclick="applyGradient()">Áp dụng</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ===== 2. APPEARANCE ===== -->
+            <div class="settings-section">
+                <div class="section-header">
+                    <div class="section-header-left">
+                        <div class="section-icon purple">🎨</div>
+                        <div>
+                            <div class="section-title">Giao diện</div>
+                            <div class="section-subtitle">Tuỳ chỉnh màu sắc và theme</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Theme picker -->
+                <div class="setting-row">
+                    <div class="setting-info">
+                        <div class="setting-label">Chế độ màu</div>
+                        <div class="setting-desc">Chọn Dark hoặc Light — áp dụng toàn bộ trang web ngay lập tức</div>
+                    </div>
+                    <div class="setting-control">
+                        <div class="theme-picker">
+                            <!-- Dark -->
+                            <div class="theme-option" id="opt-dark" onclick="setTheme('dark')">
+                                <div class="theme-preview preview-dark">
+                                    <div class="preview-sidebar"></div>
+                                    <div class="preview-bar"></div>
+                                    <div class="preview-card"></div>
+                                    <div class="theme-check">✓</div>
+                                </div>
+                                <span class="theme-label">Dark</span>
+                            </div>
+                            <!-- Light -->
+                            <div class="theme-option" id="opt-light" onclick="setTheme('light')">
+                                <div class="theme-preview preview-light">
+                                    <div class="preview-sidebar"></div>
+                                    <div class="preview-bar"></div>
+                                    <div class="preview-card"></div>
+                                    <div class="theme-check">✓</div>
+                                </div>
+                                <span class="theme-label">Light</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Compact mode -->
+                <div class="setting-row">
+                    <div class="setting-info">
+                        <div class="setting-label">Chế độ compact</div>
+                        <div class="setting-desc">Giảm padding, hiển thị nhiều card hơn trên màn hình</div>
+                    </div>
+                    <div class="setting-control">
+                        <label class="toggle">
+                            <input type="checkbox" id="toggle-compact" onchange="saveSetting('compact', this.checked)" />
+                            <div class="toggle-track"></div>
+                            <div class="toggle-thumb"></div>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Animations -->
+                <div class="setting-row">
+                    <div class="setting-info">
+                        <div class="setting-label">Hiệu ứng chuyển động</div>
+                        <div class="setting-desc">Bật/tắt animation khi mở modal, kéo card</div>
+                    </div>
+                    <div class="setting-control">
+                        <label class="toggle">
+                            <input type="checkbox" id="toggle-animation" checked onchange="saveSetting('animation', this.checked)" />
+                            <div class="toggle-track"></div>
+                            <div class="toggle-thumb"></div>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ===== 3. BOARD ===== -->
+            <div class="settings-section">
+                <div class="section-header">
+                    <div class="section-header-left">
+                        <div class="section-icon blue">📋</div>
+                        <div>
+                            <div class="section-title">Board</div>
+                            <div class="section-subtitle">Tuỳ chỉnh cách hiển thị kanban board</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Default priority -->
+                <div class="setting-row">
+                    <div class="setting-info">
+                        <div class="setting-label">Priority mặc định khi tạo card</div>
+                        <div class="setting-desc">Priority được chọn sẵn khi bạn tạo card mới</div>
+                    </div>
+                    <div class="setting-control">
+                        <select class="setting-select" id="sel-priority" onchange="saveSetting('defaultPriority', this.value)">
+                            <option value="High">🔴 High</option>
+                            <option value="Medium">🟡 Medium</option>
+                            <option value="Low">🟢 Low</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Auto-poll interval -->
+                <div class="setting-row">
+                    <div class="setting-info">
+                        <div class="setting-label">Tần suất tự động cập nhật board</div>
+                        <div class="setting-desc">Board tự fetch data mới sau mỗi khoảng thời gian</div>
+                    </div>
+                    <div class="setting-control">
+                        <select class="setting-select" id="sel-poll" onchange="saveSetting('pollInterval', this.value)">
+                            <option value="10000">10 giây</option>
+                            <option value="15000" selected>15 giây</option>
+                            <option value="30000">30 giây</option>
+                            <option value="60000">1 phút</option>
+                            <option value="0">Tắt</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Show assignee name -->
+                <div class="setting-row">
+                    <div class="setting-info">
+                        <div class="setting-label">Hiển thị tên assignee trên card</div>
+                        <div class="setting-desc">Tắt để card gọn hơn, chỉ hiện avatar</div>
+                    </div>
+                    <div class="setting-control">
+                        <label class="toggle">
+                            <input type="checkbox" id="toggle-assignee-name" checked onchange="saveSetting('showAssigneeName', this.checked)" />
+                            <div class="toggle-track"></div>
+                            <div class="toggle-thumb"></div>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Show due date badge -->
+                <div class="setting-row">
+                    <div class="setting-info">
+                        <div class="setting-label">Hiển thị badge due date trên card</div>
+                        <div class="setting-desc">Badge màu đỏ khi quá hạn, vàng khi sắp hết hạn</div>
+                    </div>
+                    <div class="setting-control">
+                        <label class="toggle">
+                            <input type="checkbox" id="toggle-due-badge" checked onchange="saveSetting('showDueBadge', this.checked)" />
+                            <div class="toggle-track"></div>
+                            <div class="toggle-thumb"></div>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ===== 4. NOTIFICATIONS ===== -->
+            <div class="settings-section">
+                <div class="section-header">
+                    <div class="section-header-left">
+                        <div class="section-icon yellow">🔔</div>
+                        <div>
+                            <div class="section-title">Thông báo</div>
+                            <div class="section-subtitle">Kiểm soát toast notification</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="setting-row">
+                    <div class="setting-info">
+                        <div class="setting-label">Toast khi board cập nhật tự động</div>
+                        <div class="setting-desc">Hiện thông báo "Board đã được cập nhật" khi có thay đổi mới</div>
+                    </div>
+                    <div class="setting-control">
+                        <label class="toggle">
+                            <input type="checkbox" id="toggle-toast-poll" checked onchange="saveSetting('toastOnPoll', this.checked)" />
+                            <div class="toggle-track"></div>
+                            <div class="toggle-thumb"></div>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="setting-row">
+                    <div class="setting-info">
+                        <div class="setting-label">Toast khi drag & drop thành công</div>
+                        <div class="setting-desc">Hiện thông báo khi chuyển card sang cột mới</div>
+                    </div>
+                    <div class="setting-control">
+                        <label class="toggle">
+                            <input type="checkbox" id="toggle-toast-drag" checked onchange="saveSetting('toastOnDrag', this.checked)" />
+                            <div class="toggle-track"></div>
+                            <div class="toggle-thumb"></div>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="setting-row">
+                    <div class="setting-info">
+                        <div class="setting-label">Thời gian hiển thị toast</div>
+                        <div class="setting-desc">Toast tự động đóng sau bao lâu</div>
+                    </div>
+                    <div class="setting-control">
+                        <select class="setting-select" id="sel-toast-duration" onchange="saveSetting('toastDuration', this.value)">
+                            <option value="2000">2 giây</option>
+                            <option value="3000" selected>3 giây</option>
+                            <option value="5000">5 giây</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ===== 5. LANGUAGE ===== -->
+            <div class="settings-section">
+                <div class="section-header">
+                    <div class="section-header-left">
+                        <div class="section-icon green">🌐</div>
+                        <div>
+                            <div class="section-title">Ngôn ngữ & Vùng</div>
+                            <div class="section-subtitle">Định dạng ngày giờ và ngôn ngữ hiển thị</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="setting-row">
+                    <div class="setting-info">
+                        <div class="setting-label">Ngôn ngữ</div>
+                        <div class="setting-desc">Ngôn ngữ hiển thị của giao diện</div>
+                    </div>
+                    <div class="setting-control">
+                        <select class="setting-select" id="sel-lang" onchange="saveSetting('language', this.value)">
+                            <option value="vi" selected>🇻🇳 Tiếng Việt</option>
+                            <option value="en">🇺🇸 English</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="setting-row">
+                    <div class="setting-info">
+                        <div class="setting-label">Định dạng ngày</div>
+                        <div class="setting-desc">Cách hiển thị due date trên card</div>
+                    </div>
+                    <div class="setting-control">
+                        <select class="setting-select" id="sel-dateformat" onchange="saveSetting('dateFormat', this.value)">
+                            <option value="dd/MM/yyyy" selected>dd/MM/yyyy</option>
+                            <option value="MM/dd/yyyy">MM/dd/yyyy</option>
+                            <option value="yyyy-MM-dd">yyyy-MM-dd</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ===== 6. DANGER ZONE ===== -->
+            <div class="settings-section danger-zone">
+                <div class="section-header">
+                    <div class="section-header-left">
+                        <div class="section-icon red">⚠️</div>
+                        <div>
+                            <div class="section-title" style="color:var(--accent-red);">Danger Zone</div>
+                            <div class="section-subtitle">Các thao tác không thể hoàn tác</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="setting-row">
+                    <div class="setting-info">
+                        <div class="setting-label">Xóa toàn bộ card đã archive</div>
+                        <div class="setting-desc">Xóa vĩnh viễn tất cả card trong tab Archived của project hiện tại</div>
+                    </div>
+                    <div class="setting-control">
+                        <button class="btn btn-danger btn-sm" onclick="confirmClearArchive()">
+                            <svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><path d="M5.5 5.5A.5.5 0 016 6v6a.5.5 0 01-1 0V6a.5.5 0 01.5-.5zm2.5 0a.5.5 0 01.5.5v6a.5.5 0 01-1 0V6a.5.5 0 01.5-.5zm3 .5a.5.5 0 00-1 0v6a.5.5 0 001 0V6z" /><path fill-rule="evenodd" d="M14.5 3a1 1 0 01-1 1H13v9a2 2 0 01-2 2H5a2 2 0 01-2-2V4h-.5a1 1 0 01-1-1V2a1 1 0 011-1H6a1 1 0 011-1h2a1 1 0 011 1h3.5a1 1 0 011 1v1zM4.118 4L4 4.059V13a1 1 0 001 1h6a1 1 0 001-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z" /></svg>
+                            Xóa Archive
+                        </button>
+                    </div>
+                </div>
+
+                <div class="setting-row">
+                    <div class="setting-info">
+                        <div class="setting-label">Reset cài đặt về mặc định</div>
+                        <div class="setting-desc">Xóa toàn bộ tuỳ chỉnh đã lưu, khôi phục cài đặt gốc</div>
+                    </div>
+                    <div class="setting-control">
+                        <button class="btn btn-danger btn-sm" onclick="confirmResetSettings()">
+                            <svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><path d="M1.5 8a6.5 6.5 0 1110.653-5H13a.5.5 0 000-1H9.5a.5.5 0 00-.5.5v3.5a.5.5 0 001 0V2.804A5.5 5.5 0 112.5 8a.5.5 0 00-1 0z" /></svg>
+                            Reset
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+        </div><!-- /content -->
+    </div><!-- /main -->
+    <!-- FLOATING SAVE BAR -->
+    <div class="save-bar" id="save-bar">
+        <span>Có thay đổi chưa được lưu</span>
+        <button class="btn btn-ghost btn-sm" onclick="discardChanges()">Hủy</button>
+        <button class="btn btn-primary btn-sm" onclick="saveAllSettings()">
+            <svg width="12" height="12" viewBox="0 0 16 16" fill="white"><path d="M2 1a1 1 0 00-1 1v12a1 1 0 001 1h12a1 1 0 001-1V2a1 1 0 00-1-1H9.5a1 1 0 00-1 1v7.293l2.646-2.647a.5.5 0 01.708.708l-3.5 3.5a.5.5 0 01-.708 0l-3.5-3.5a.5.5 0 11.708-.708L7.5 9.293V2a2 2 0 012-2H14a2 2 0 012 2v12a2 2 0 01-2 2H2a2 2 0 01-2-2V2a2 2 0 012-2h2.5a.5.5 0 010 1H2z" /></svg>
+            Lưu tất cả
+        </button>
+    </div>
+
+    <script>
+        // ===================================================================
+        // THEME ENGINE — đồng bộ tất cả tab/trang trong cùng origin
+        // ===================================================================
+        const THEME_KEY = 'tm_theme';
+        const SETTINGS_KEY = 'tm_settings';
+        const CURRENT_PROJECT_KEY = 'tm_current_project_id';
+
+        // Đọc theme từ localStorage và áp dụng ngay
+        function applyTheme(theme) {
+            document.documentElement.setAttribute('data-theme', theme);
+            // Update picker UI
+            document.getElementById('opt-dark')?.classList.toggle('active', theme === 'dark');
+            document.getElementById('opt-light')?.classList.toggle('active', theme === 'light');
+        }
+
+        function setTheme(theme) {
+            localStorage.setItem(THEME_KEY, theme);
+            applyTheme(theme);
+            showToast(`Đã chuyển sang chế độ ${theme === 'dark' ? '🌙 Dark' : '☀️ Light'}`, 'success', 2500);
+            // Broadcast sang các tab khác
+            window.dispatchEvent(new StorageEvent('storage', { key: THEME_KEY, newValue: theme }));
+        }
+
+        // Lắng nghe thay đổi từ tab khác
+        window.addEventListener('storage', e => {
+            if (e.key === THEME_KEY) applyTheme(e.newValue || 'dark');
+            if (e.key === SETTINGS_KEY) applyStoredSettings();
+        });
+
+        // ===================================================================
+        // SETTINGS STORE
+        // ===================================================================
+        const DEFAULT_SETTINGS = {
+            compact: false,
+            animation: true,
+            defaultPriority: 'High',
+            pollInterval: 15000,
+            showAssigneeName: true,
+            showDueBadge: true,
+            toastOnPoll: true,
+            toastOnDrag: true,
+            toastDuration: 3000,
+            language: 'vi',
+            dateFormat: 'dd/MM/yyyy',
+        };
+
+        let pendingSettings = {};
+        let hasUnsaved = false;
+
+        function loadSettings() {
+            try {
+                return { ...DEFAULT_SETTINGS, ...JSON.parse(localStorage.getItem(SETTINGS_KEY) || '{}') };
+            } catch { return { ...DEFAULT_SETTINGS }; }
+        }
+
+        function applySettingsToUI(s) {
+            setEl('toggle-compact', s.compact);
+            setEl('toggle-animation', s.animation);
+            setEl('toggle-assignee-name', s.showAssigneeName);
+            setEl('toggle-due-badge', s.showDueBadge);
+            setEl('toggle-toast-poll', s.toastOnPoll);
+            setEl('toggle-toast-drag', s.toastOnDrag);
+            setSelVal('sel-priority', s.defaultPriority);
+            setSelVal('sel-poll', String(s.pollInterval));
+            setSelVal('sel-toast-duration', String(s.toastDuration));
+            setSelVal('sel-lang', s.language);
+            setSelVal('sel-dateformat', s.dateFormat);
+        }
+
+        function applyStoredSettings() {
+            const s = loadSettings();
+            document.documentElement.lang = s.language || 'vi';
+            document.body.classList.toggle('compact-mode', !!s.compact);
+            document.body.classList.toggle('no-animation', !s.animation);
+            applyLanguage(s.language || 'vi');
+        }
+
+        function applyLanguage(language) {
+            const isEn = language === 'en';
+            const text = {
+                pageTitle: isEn ? 'Settings' : 'Settings',
+                pageDesc: isEn ? 'Manage your account and workspace preferences' : 'Quản lý tài khoản và tuỳ chỉnh trải nghiệm của bạn',
+                profile: isEn ? 'Profile' : 'Hồ sơ',
+                appearance: isEn ? 'Appearance' : 'Giao diện',
+                colorMode: isEn ? 'Color mode' : 'Chế độ màu',
+                compact: isEn ? 'Compact mode' : 'Chế độ compact',
+                animation: isEn ? 'Motion effects' : 'Hiệu ứng chuyển động',
+                board: isEn ? 'Board' : 'Board',
+                defaultPriority: isEn ? 'Default priority when creating cards' : 'Priority mặc định khi tạo card',
+                poll: isEn ? 'Board auto-update interval' : 'Tần suất tự động cập nhật board',
+                assignee: isEn ? 'Show assignee name on cards' : 'Hiển thị tên assignee trên card',
+                due: isEn ? 'Show due date badge on cards' : 'Hiển thị badge due date trên card',
+                notifications: isEn ? 'Notifications' : 'Thông báo',
+                toastPoll: isEn ? 'Toast when board auto-updates' : 'Toast khi board cập nhật tự động',
+                toastDrag: isEn ? 'Toast after drag & drop succeeds' : 'Toast khi drag & drop thành công',
+                toastDuration: isEn ? 'Toast display duration' : 'Thời gian hiển thị toast',
+                languageRegion: isEn ? 'Language & Region' : 'Ngôn ngữ & Vùng',
+                languageLabel: isEn ? 'Language' : 'Ngôn ngữ',
+                dateFormat: isEn ? 'Date format' : 'Định dạng ngày',
+                danger: isEn ? 'Danger Zone' : 'Danger Zone',
+                clearArchive: isEn ? 'Delete all archived cards' : 'Xóa toàn bộ card đã archive',
+                reset: isEn ? 'Reset settings to default' : 'Reset cài đặt về mặc định',
+                unsaved: isEn ? 'Unsaved changes' : 'Có thay đổi chưa được lưu',
+                cancel: isEn ? 'Cancel' : 'Hủy',
+                saveAll: isEn ? 'Save all' : 'Lưu tất cả',
+            };
+
+            document.querySelector('.page-header h1').textContent = text.pageTitle;
+            document.querySelector('.page-header p').textContent = text.pageDesc;
+
+            const sectionTitles = document.querySelectorAll('.section-title');
+            if (sectionTitles[0]) sectionTitles[0].textContent = text.profile;
+            if (sectionTitles[1]) sectionTitles[1].textContent = text.appearance;
+            if (sectionTitles[2]) sectionTitles[2].textContent = text.board;
+            if (sectionTitles[3]) sectionTitles[3].textContent = text.notifications;
+            if (sectionTitles[4]) sectionTitles[4].textContent = text.languageRegion;
+            if (sectionTitles[5]) sectionTitles[5].textContent = text.danger;
+
+            const labels = document.querySelectorAll('.setting-label');
+            const values = [text.colorMode, text.compact, text.animation, text.defaultPriority, text.poll, text.assignee, text.due, text.toastPoll, text.toastDrag, text.toastDuration, text.languageLabel, text.dateFormat, text.clearArchive, text.reset];
+            values.forEach((value, index) => { if (labels[index]) labels[index].textContent = value; });
+
+            const saveBar = document.getElementById('save-bar');
+            if (saveBar) {
+                saveBar.querySelector('span').textContent = text.unsaved;
+                const buttons = saveBar.querySelectorAll('button');
+                if (buttons[0]) buttons[0].textContent = text.cancel;
+                if (buttons[1]) buttons[1].lastChild.textContent = text.saveAll;
+            }
+        }
+
+        function setEl(id, checked) {
+            const el = document.getElementById(id);
+            if (el) el.checked = checked;
+        }
+        function setSelVal(id, val) {
+            const el = document.getElementById(id);
+            if (el) el.value = val;
+        }
+
+        function saveSetting(key, value) {
+            pendingSettings[key] = value;
+            hasUnsaved = true;
+            document.getElementById('save-bar').classList.add('visible');
+        }
+
+        function saveAllSettings() {
+            const current = loadSettings();
+            const merged = { ...current, ...pendingSettings };
+            localStorage.setItem(SETTINGS_KEY, JSON.stringify(merged));
+            pendingSettings = {};
+            hasUnsaved = false;
+            document.getElementById('save-bar').classList.remove('visible');
+            // Broadcast settings change
+            window.dispatchEvent(new StorageEvent('storage', { key: SETTINGS_KEY, newValue: JSON.stringify(merged) }));
+            applyStoredSettings();
+            showToast('Đã lưu cài đặt', 'success');
+        }
+
+        function discardChanges() {
+            pendingSettings = {};
+            hasUnsaved = false;
+            document.getElementById('save-bar').classList.remove('visible');
+            const s = loadSettings();
+            applySettingsToUI(s);
+            applyStoredSettings();
+            showToast('Đã huỷ thay đổi', 'info', 2000);
+        }
+
+        // ===================================================================
+        // DANGER ZONE
+        // ===================================================================
+        function confirmClearArchive() {
+            showConfirm(
+                '⚠️ Xóa Archive',
+                'Toàn bộ card đã archive sẽ bị xóa vĩnh viễn.<br>Bạn chắc chắn không?',
+                clearArchivedCards
+            );
+        }
+
+        async function getCurrentProjectId() {
+            const savedProjectId = localStorage.getItem(CURRENT_PROJECT_KEY);
+            if (savedProjectId) return savedProjectId;
+
+            try {
+                const res = await fetch('/api/projects', { credentials: 'include' });
+                if (!res.ok) return null;
+                const projects = await res.json();
+                if (!projects.length) return null;
+
+                localStorage.setItem(CURRENT_PROJECT_KEY, projects[0].id);
+                return projects[0].id;
+            } catch {
+                return null;
+            }
+        }
+
+        async function clearArchivedCards() {
+            const projectId = await getCurrentProjectId();
+            if (!projectId) {
+                showToast('Không tìm thấy project để xóa archive', 'error');
+                return;
+            }
+
+            try {
+                const csrf = await getCsrfToken();
+                const res = await fetch(`/api/taskitems/project/${projectId}/archived`, {
+                    method: 'DELETE',
+                    credentials: 'include',
+                    headers: { 'X-XSRF-TOKEN': csrf }
+                });
+
+                if (!res.ok) {
+                    showToast('Xóa archive thất bại: ' + await res.text(), 'error');
+                    return;
+                }
+
+                const result = await res.json();
+                showToast(`Đã xóa ${result.deleted ?? 0} card archived`, 'success');
+            } catch {
+                showToast('Không thể kết nối server để xóa archive', 'error');
+            }
+        }
+
+        function confirmResetSettings() {
+            showConfirm(
+                '⚠️ Reset cài đặt',
+                'Tất cả tuỳ chỉnh sẽ được khôi phục về mặc định.',
+                () => {
+                    localStorage.removeItem(SETTINGS_KEY);
+                    pendingSettings = {};
+                    hasUnsaved = false;
+                    document.getElementById('save-bar').classList.remove('visible');
+                    const s = loadSettings();
+                    applySettingsToUI(s);
+                    applyStoredSettings();
+                    window.dispatchEvent(new StorageEvent('storage', { key: SETTINGS_KEY, newValue: JSON.stringify(s) }));
+                    showToast('Đã reset về cài đặt mặc định', 'info');
+                }
+            );
+        }
+
+        // ===================================================================
+        // TOAST
+        // ===================================================================
+        function showToast(msg, type = 'info', duration = 3000) {
+            const icons = { success: '✓', error: '✕', info: 'ℹ', warning: '⚠' };
+            const c = document.getElementById('toast-container');
+            const t = document.createElement('div');
+            t.className = `toast ${type}`;
+            t.innerHTML = `<span class="toast-icon">${icons[type] || 'ℹ'}</span><span class="toast-msg">${msg}</span><button class="toast-close" onclick="this.parentElement.remove()">×</button>`;
+            c.appendChild(t);
+            setTimeout(() => { t.style.animation = 'toastOut .25s ease forwards'; setTimeout(() => t.remove(), 250); }, duration);
+        }
+
+        // ===================================================================
+        // CONFIRM DIALOG  (inline, no modal-root needed)
+        // ===================================================================
+        function showConfirm(title, msg, onConfirm) {
+            // remove existing
+            document.getElementById('_confirm_backdrop')?.remove();
+            const bd = document.createElement('div');
+            bd.id = '_confirm_backdrop';
+            bd.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,.55);backdrop-filter:blur(3px);display:flex;align-items:center;justify-content:center;z-index:500;animation:toastIn .15s ease';
+            bd.innerHTML = `
+        <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:24px;width:360px;max-width:95%;box-shadow:0 24px 60px rgba(0,0,0,.5);">
+          <div style="font-size:22px;margin-bottom:10px;">${title.split(' ')[0]}</div>
+          <div style="font-size:15px;font-weight:600;color:var(--text-primary);margin-bottom:8px;">${title.replace(/^[^\s]+\s/, '')}</div>
+          <div style="font-size:13.5px;color:var(--text-secondary);line-height:1.6;margin-bottom:20px;">${msg}</div>
+          <div style="display:flex;gap:8px;justify-content:flex-end;">
+            <button class="btn btn-ghost btn-sm" id="_conf_cancel">Hủy</button>
+            <button class="btn btn-danger btn-sm" id="_conf_ok">Xác nhận</button>
+          </div>
+        </div>`;
+            document.body.appendChild(bd);
+            document.getElementById('_conf_cancel').onclick = () => bd.remove();
+            document.getElementById('_conf_ok').onclick = () => { bd.remove(); onConfirm(); };
+            bd.addEventListener('click', e => { if (e.target === bd) bd.remove(); });
+        }
+
+        // ===================================================================
+        // AUTH & PROFILE
+        // ===================================================================
+        const AVATAR_COLOR_KEY = 'tm_avatar_gradient';
+        const DEFAULT_GRADIENT = 'linear-gradient(135deg,#1f6feb,#8957e5)';
+
+        const GRADIENT_PRESETS = [
+            { label: 'Ocean',    value: 'linear-gradient(135deg,#1f6feb,#0ea5e9)' },
+            { label: 'Violet',   value: 'linear-gradient(135deg,#7c3aed,#c026d3)' },
+            { label: 'Sunset',   value: 'linear-gradient(135deg,#f59e0b,#ef4444)' },
+            { label: 'Aurora',   value: 'linear-gradient(135deg,#06b6d4,#6366f1)' },
+            { label: 'Forest',   value: 'linear-gradient(135deg,#16a34a,#0ea5e9)' },
+            { label: 'Rose',     value: 'linear-gradient(135deg,#f43f5e,#f97316)' },
+            { label: 'Midnight', value: 'linear-gradient(135deg,#1e293b,#475569)' },
+            { label: 'Candy',    value: 'linear-gradient(135deg,#ec4899,#8b5cf6)' },
+            { label: 'Gold',     value: 'linear-gradient(135deg,#d97706,#f59e0b)' },
+            { label: 'Neon',     value: 'linear-gradient(135deg,#22d3ee,#a3e635)' },
+            { label: 'Sakura',   value: 'linear-gradient(135deg,#fb7185,#fda4af)' },
+            { label: 'Deep',     value: 'linear-gradient(135deg,#312e81,#6d28d9)' },
+        ];
+
+        let _currentUser = null;
+        let _pendingGradient = null; // gradient selected in picker but not applied yet
+
+        function getInitials(n) {
+            if (!n) return '?';
+            return n.split(' ').filter(Boolean).map(w => w[0]).join('').toUpperCase().slice(0, 2);
+        }
+
+        function applyAvatarGradient(gradient, elIds = ['profile-avatar', 'sidebar-avatar']) {
+            elIds.forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.style.background = gradient;
+            });
+        }
+
+        async function loadCurrentUser() {
+            try {
+                // Use the richer /api/users/me which returns stats + avatarColor
+                const res = await fetch('/api/users/me', { credentials: 'include' });
+                if (!res.ok) { console.warn('loadCurrentUser:', res.status); return; }
+                const user = await res.json();
+                _currentUser = user;
+
+                const name  = user.username || user.email || 'User';
+                const email = user.email || '—';
+                const initials = getInitials(name);
+
+                // Sidebar
+                const sidebarAvatar = document.getElementById('sidebar-avatar');
+                const sidebarName   = document.getElementById('sidebar-name');
+                if (sidebarAvatar) sidebarAvatar.textContent = initials;
+                if (sidebarName)   sidebarName.textContent   = name;
+
+                // Hero
+                const profileAvatar = document.getElementById('profile-avatar');
+                if (profileAvatar) profileAvatar.textContent = initials;
+                document.getElementById('profile-name').textContent  = name;
+                document.getElementById('profile-email').textContent = email;
+
+                // Google info panel
+                document.getElementById('gi-email').textContent   = email;
+                document.getElementById('gi-name').textContent    = name;
+                const joinedDate = user.createdAt ? new Date(user.createdAt) : null;
+                document.getElementById('gi-created').textContent = joinedDate
+                    ? joinedDate.toLocaleDateString('vi-VN', { year:'numeric', month:'long', day:'numeric' })
+                    : '—';
+
+                // Stats
+                document.getElementById('stat-projects').textContent = user.projectCount ?? '—';
+                document.getElementById('stat-tasks').textContent    = user.taskCount    ?? '—';
+                document.getElementById('stat-joined').textContent   = joinedDate
+                    ? joinedDate.toLocaleDateString('vi-VN', { year:'numeric', month:'short' })
+                    : '—';
+
+                // Avatar gradient: backend avatarColor > localStorage > default
+                let gradient = user.avatarColor
+                    || localStorage.getItem(AVATAR_COLOR_KEY)
+                    || DEFAULT_GRADIENT;
+                if (user.avatarColor) localStorage.setItem(AVATAR_COLOR_KEY, user.avatarColor);
+                applyAvatarGradient(gradient);
+
+            } catch (e) { console.error('loadCurrentUser error:', e); }
+        }
+
+        function logout() { window.location.href = '/api/auth/signout-redirect?returnUrl=/login.html'; }
+
+        // ===================================================================
+        // CSRF HELPER — fetches once and caches for the session
+        // ===================================================================
+        let _csrfToken = null;
+        async function getCsrfToken() {
+            if (_csrfToken) return _csrfToken;
+            try {
+                const res = await fetch('/api/antiforgery/token', { credentials: 'include' });
+                if (res.ok) {
+                    const data = await res.json();
+                    _csrfToken = data.token;
+                }
+            } catch (e) { console.error('getCsrfToken error:', e); }
+            return _csrfToken || '';
+        }
+
+        // ===================================================================
+        // EDIT DISPLAY NAME
+        // ===================================================================
+        function startEditName() {
+            const current = document.getElementById('profile-name').textContent;
+            document.getElementById('input-name').value = current;
+            document.getElementById('name-view-row').style.display  = 'none';
+            document.getElementById('name-edit-row').style.display  = 'flex';
+            document.getElementById('input-name').focus();
+        }
+
+        function cancelEditName() {
+            document.getElementById('name-view-row').style.display = 'flex';
+            document.getElementById('name-edit-row').style.display = 'none';
+        }
+
+        async function saveName() {
+            const newName = document.getElementById('input-name').value.trim();
+            if (!newName) { showToast('Tên không được để trống', 'error'); return; }
+            if (!_currentUser) { showToast('Chưa tải được thông tin user', 'error'); return; }
+
+            const currentGradient = localStorage.getItem(AVATAR_COLOR_KEY) || DEFAULT_GRADIENT;
+
+            try {
+                const csrf = await getCsrfToken();
+                const res = await fetch('/api/users/me', {
+                    method: 'PUT',
+                    credentials: 'include',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-XSRF-TOKEN': csrf
+                    },
+                    body: JSON.stringify({ username: newName, avatarColor: currentGradient })
+                });
+
+                if (res.ok) {
+                    const updated = await res.json();
+                    const name = updated.username || newName;
+                    document.getElementById('profile-name').textContent = name;
+                    document.getElementById('gi-name').textContent      = name;
+                    document.getElementById('sidebar-name').textContent  = name;
+                    // update initials
+                    const initials = getInitials(name);
+                    document.getElementById('profile-avatar').textContent = initials;
+                    document.getElementById('sidebar-avatar').textContent = initials;
+                    document.getElementById('gp-preview').textContent     = initials;
+                    if (_currentUser) _currentUser.username = name;
+                    cancelEditName();
+                    showToast('Đã cập nhật tên hiển thị ✓', 'success');
+                } else {
+                    const err = await res.text();
+                    showToast(err || 'Lỗi khi lưu tên', 'error');
+                }
+            } catch (e) {
+                showToast('Không thể kết nối server', 'error');
+            }
+        }
+
+        // Enter to save, Escape to cancel
+        document.addEventListener('keydown', e => {
+            if (document.getElementById('name-edit-row')?.style.display !== 'none') {
+                if (e.key === 'Enter')  saveName();
+                if (e.key === 'Escape') cancelEditName();
+            }
+        });
+
+        // ===================================================================
+        // GRADIENT PICKER
+        // ===================================================================
+        function buildSwatches() {
+            const container = document.getElementById('gp-swatches');
+            if (!container || container.childElementCount > 0) return;
+            GRADIENT_PRESETS.forEach((preset, i) => {
+                const btn = document.createElement('button');
+                btn.className = 'gp-swatch';
+                btn.title = preset.label;
+                btn.style.background = preset.value;
+                btn.dataset.gradient = preset.value;
+                btn.onclick = () => selectPreset(btn, preset.value);
+                container.appendChild(btn);
+            });
+        }
+
+        function selectPreset(btn, gradient) {
+            document.querySelectorAll('.gp-swatch').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            _pendingGradient = gradient;
+            document.getElementById('gp-preview').style.background = gradient;
+        }
+
+        function onCustomGradientChange() {
+            const from = document.getElementById('gp-color-from').value;
+            const to   = document.getElementById('gp-color-to').value;
+            const dir  = document.getElementById('gp-direction').value;
+            const gradient = `linear-gradient(${dir},${from},${to})`;
+            _pendingGradient = gradient;
+            document.getElementById('gp-preview').style.background = gradient;
+            // deselect presets
+            document.querySelectorAll('.gp-swatch').forEach(b => b.classList.remove('active'));
+        }
+
+        function openGradientPicker() {
+            buildSwatches();
+            const bd = document.getElementById('gradient-backdrop');
+            // sync preview with current avatar
+            const currentGradient = localStorage.getItem(AVATAR_COLOR_KEY) || DEFAULT_GRADIENT;
+            const initials = _currentUser ? getInitials(_currentUser.username || _currentUser.email) : 'U';
+            const preview = document.getElementById('gp-preview');
+            preview.style.background = currentGradient;
+            preview.textContent = initials;
+            _pendingGradient = null;
+            // highlight active preset
+            document.querySelectorAll('.gp-swatch').forEach(b => {
+                b.classList.toggle('active', b.dataset.gradient === currentGradient);
+            });
+            bd.style.display = 'flex';
+            requestAnimationFrame(() => bd.classList.add('open'));
+        }
+
+        function closeGradientPicker(e) {
+            if (e && e.target !== document.getElementById('gradient-backdrop')) return;
+            const bd = document.getElementById('gradient-backdrop');
+            bd.classList.remove('open');
+            setTimeout(() => { bd.style.display = 'none'; }, 200);
+            _pendingGradient = null;
+        }
+
+        async function applyGradient() {
+            if (!_pendingGradient) { closeGradientPicker(); return; }
+            const gradient = _pendingGradient;
+
+            // 1. Apply visually
+            applyAvatarGradient(gradient);
+
+            // 2. Save to localStorage immediately
+            localStorage.setItem(AVATAR_COLOR_KEY, gradient);
+
+            // 3. Sync to backend
+            if (_currentUser) {
+                try {
+                    const csrf = await getCsrfToken();
+                    await fetch('/api/users/me', {
+                        method: 'PUT',
+                        credentials: 'include',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-XSRF-TOKEN': csrf
+                        },
+                        body: JSON.stringify({
+                            username: _currentUser.username,
+                            avatarColor: gradient
+                        })
+                    });
+                } catch { /* silent — localStorage already saved */ }
+            }
+
+            closeGradientPicker();
+            showToast('Đã cập nhật màu avatar ✓', 'success');
+        }
+
+        // ===================================================================
+        // INIT
+        // ===================================================================
+        (function init() {
+            // 1. Apply theme từ localStorage
+            const savedTheme = localStorage.getItem(THEME_KEY) || 'dark';
+            applyTheme(savedTheme);
+
+            // 2. Apply settings to UI
+            const s = loadSettings();
+            applySettingsToUI(s);
+            applyStoredSettings();
+
+            // 3. Apply saved avatar gradient immediately (before fetch)
+            const savedGradient = localStorage.getItem(AVATAR_COLOR_KEY) || DEFAULT_GRADIENT;
+            applyAvatarGradient(savedGradient);
+
+            // 4. Load user (stats, name, email, avatarColor)
+            loadCurrentUser();
+
+            // 5. Warn khi rời trang nếu có unsaved
+            window.addEventListener('beforeunload', e => {
+                if (hasUnsaved) { e.preventDefault(); e.returnValue = ''; }
+            });
+        })();
+    </script>
+</body>
+</html>
