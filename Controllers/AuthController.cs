@@ -1,12 +1,12 @@
 ﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
-using JiraMini.Data;
-using JiraMini.Models;
+using TrelloMini.Data;
+using TrelloMini.Models;
 using System.Security.Claims;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.Cookies;
 
-namespace JiraMini.Controllers
+namespace TrelloMini.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]

@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace JiraMini.Migrations
+namespace TrelloMini.Migrations
 {
     /// <inheritdoc />
     public partial class AddDueDateLabelArchive : Migration

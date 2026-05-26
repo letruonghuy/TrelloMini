@@ -1,4 +1,4 @@
-﻿namespace JiraMini.Models
+﻿namespace TrelloMini.Models
 {
     public class Status
     {

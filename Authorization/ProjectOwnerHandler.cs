@@ -1,13 +1,13 @@
 using Microsoft.AspNetCore.Authorization;
 using System.Threading.Tasks;
 using System.Security.Claims;
-using JiraMini.Data;
+using TrelloMini.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Http;
 using System;
 
-namespace JiraMini.Authorization
+namespace TrelloMini.Authorization
 {
     public class ProjectOwnerHandler : AuthorizationHandler<ProjectOwnerRequirement>
     {

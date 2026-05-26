@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Authorization;
 
-namespace JiraMini.Authorization
+namespace TrelloMini.Authorization
 {
     public class ProjectOwnerRequirement : IAuthorizationRequirement
     {

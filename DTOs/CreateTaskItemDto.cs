@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace JiraMini.Models
+namespace TrelloMini.Models
 {
     
     public class CreateTaskItemDto

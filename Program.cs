@@ -1,10 +1,10 @@
-﻿﻿using JiraMini.Data;
+﻿﻿using TrelloMini.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using JiraMini.Authorization;
+using TrelloMini.Authorization;
 using Microsoft.Extensions.FileProviders;
 using System.IO;
 using Microsoft.AspNetCore.Authorization;

@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Antiforgery;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace JiraMini.Controllers
+namespace TrelloMini.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]

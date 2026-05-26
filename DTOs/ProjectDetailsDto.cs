@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace JiraMini.Models
+namespace TrelloMini.Models
 {
     public class ProjectMemberDto
     {

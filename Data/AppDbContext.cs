@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using JiraMini.Models;
+using TrelloMini.Models;
 
-namespace JiraMini.Data
+namespace TrelloMini.Data
 {
     public class AppDbContext : DbContext
     {

@@ -1,6 +1,6 @@
 using System;
 
-namespace JiraMini.Models
+namespace TrelloMini.Models
 {
     public class ProjectDto
     {
