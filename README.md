@@ -134,6 +134,5 @@
 ## 6. Thông tin tác giả
 
 *   **Họ và tên:** Lê Trương Trường Huy
-*   **MSSV:** 2224802010230
 
 ---
